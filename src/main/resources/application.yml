@@ -1,0 +1,13 @@
+# spring.datasource.url=jdbc:sqlserver://172.31.44.199:1433;databaseName=PTLIMS;user=qauser;password=qauser
+spring:
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;instanceName=SQLEXPRESS;databaseName=PTLIMS;user=sa;password=123
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+barcode-query:
+  default-uri: http://172.31.193.174/barcodetest/BarCode.WebService/WSQATracking.asmx
