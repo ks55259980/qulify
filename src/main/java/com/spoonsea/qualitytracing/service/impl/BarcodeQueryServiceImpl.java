@@ -1,6 +1,9 @@
 package com.spoonsea.qualitytracing.service.impl;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -45,6 +48,25 @@ public class BarcodeQueryServiceImpl implements BarcodeQueryService {
 		BoxCodeTracingQueryResponse response = (BoxCodeTracingQueryResponse) webServiceTemplate
 				.marshalSendAndReceive(query);
 		String resultString = response.getBoxCodeTracingQueryResult();
+		logger.info("client received response = '{}'", resultString);
+		BarcodeQueryResult result = new ObjectMapper().readValue(resultString, BarcodeQueryResult.class);
+		if (result.getCode() != 0) {
+			logger.warn("query failed: {}", result.getMsg());
+		}
+		return result.getDetailList();
+	}
+	
+	@Override
+	public List<BarcodeQueryResultDetail> queryByTimeInterval(String factoryCode, String lineCode, Date startTime, Date endTime)
+			throws JsonParseException, JsonMappingException, IOException {
+		BatchTracingQuery query = new ObjectFactory().createBatchTracingQuery();
+		query.setArbpl(lineCode);
+		query.setWerks(factoryCode);
+		DateFormat dataFormat = new SimpleDateFormat("yyyyMMddHHmmss"); 
+		query.setStartTime(dataFormat.format(startTime));
+		query.setEndTime(dataFormat.format(endTime));
+		BatchTracingQueryResponse response = (BatchTracingQueryResponse) webServiceTemplate.marshalSendAndReceive(query);
+		String resultString = response.getBatchTracingQueryResult();
 		logger.info("client received response = '{}'", resultString);
 		BarcodeQueryResult result = new ObjectMapper().readValue(resultString, BarcodeQueryResult.class);
 		if (result.getCode() != 0) {

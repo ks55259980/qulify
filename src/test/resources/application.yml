@@ -1,7 +1,11 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://localhost:1433;instanceName=SQLEXPRESS;databaseName=PTLIMS;user=sa;password=123
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    barcode:
+      url: jdbc:sqlserver://localhost:1433;instanceName=SQLEXPRESS;databaseName=PTLIMS;user=sa;password=123
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    lims:
+      url: jdbc:sqlserver://localhost:1433;instanceName=SQLEXPRESS;databaseName=PTLIMS;user=sa;password=123
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     database-platform: org.hibernate.dialect.SQLServerDialect
     show-sql: true

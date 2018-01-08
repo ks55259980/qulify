@@ -1,6 +1,7 @@
 package com.spoonsea.qualitytracing.service;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -13,5 +14,8 @@ public interface BarcodeQueryService {
 			throws JsonParseException, JsonMappingException, IOException;
 
 	String helloWorld();
+
+	List<BarcodeQueryResultDetail> queryByTimeInterval(String factoryCode, String LineCode, Date startTime,
+			Date endTime) throws JsonParseException, JsonMappingException, IOException;
 
 }

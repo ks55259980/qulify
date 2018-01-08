@@ -1,12 +1,17 @@
 spring:
   datasource:
-    url: @datasource.url@
-    driver-class-name: @datasource.driver-class-name@
+    barcode:
+      url: @datasource.barcode.url@
+      driver-class-name: @datasource.barcode.driver-class-name@
+      username: @datasource.barcode.username@
+      password: @datasource.barcode.password@
+    lims:
+      url: @datasource.lims.url@
+      driver-class-name: @datasource.lims.driver-class-name@
   jpa:
-    database-platform: @database.platform@
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 barcode-query:
   default-uri: @default-uri@

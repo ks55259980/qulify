@@ -12,6 +12,23 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="BatchTracingQuery">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StartTime" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EndTime" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="arbpl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="werks" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BatchTracingQueryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="BatchTracingQueryResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="BoxCodeTracingQuery">
         <s:complexType>
           <s:sequence>
@@ -34,6 +51,12 @@
   <wsdl:message name="HelloWorldSoapOut">
     <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
   </wsdl:message>
+  <wsdl:message name="BatchTracingQuerySoapIn">
+    <wsdl:part name="parameters" element="tns:BatchTracingQuery" />
+  </wsdl:message>
+  <wsdl:message name="BatchTracingQuerySoapOut">
+    <wsdl:part name="parameters" element="tns:BatchTracingQueryResponse" />
+  </wsdl:message>
   <wsdl:message name="BoxCodeTracingQuerySoapIn">
     <wsdl:part name="parameters" element="tns:BoxCodeTracingQuery" />
   </wsdl:message>
@@ -45,6 +68,10 @@
       <wsdl:input message="tns:HelloWorldSoapIn" />
       <wsdl:output message="tns:HelloWorldSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="BatchTracingQuery">
+      <wsdl:input message="tns:BatchTracingQuerySoapIn" />
+      <wsdl:output message="tns:BatchTracingQuerySoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="BoxCodeTracingQuery">
       <wsdl:input message="tns:BoxCodeTracingQuerySoapIn" />
       <wsdl:output message="tns:BoxCodeTracingQuerySoapOut" />
@@ -54,6 +81,15 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="HelloWorld">
       <soap:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchTracingQuery">
+      <soap:operation soapAction="http://tempuri.org/BatchTracingQuery" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -75,6 +111,15 @@
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="HelloWorld">
       <soap12:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchTracingQuery">
+      <soap12:operation soapAction="http://tempuri.org/BatchTracingQuery" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
