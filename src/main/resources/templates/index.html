@@ -13,7 +13,7 @@
 <form>
     <div class="form-group">
         <label for="boxCodeInput">boxCode: </label>
-        <input type="text" class="request-param form-control" id="boxCodeInput" name="boxCode"/>
+        <input type="text" class="request-param form-control" id="boxCodeInput" name="boxCode" placeholder="16位字符数字" value="1712291712070122"/>
     </div>
     <div>
         <button type="button" class="btn btn-primary query" name="queryByBoxCode">query</button>
@@ -24,13 +24,13 @@
     <div class="form-row">
 	    <div class="form-group">
 	        <label for="factoryCodeInput">FactoryCode: </label>
-	        <input type="text" class="request-param form-control" id="factoryCodeInput" name="factoryCode"/>
+	        <input type="text" class="request-param form-control" id="factoryCodeInput" name="factoryCode" placeholder="莆田新厂：CN01" value="CN01"/>
 	    </div>
     </div>
     <div class="form-row">
 	    <div class="form-group">
 	        <label for="lineCodeInput">LineCode: </label>
-	        <input type="text" class="request-param form-control" id="lineCodeInput" name="lineCode"/>
+	        <input type="text" class="request-param form-control" id="lineCodeInput" name="lineCode" placeholder="瓶01线：70100001" value="70100001"/>
 	    </div>
     </div>
     <div class="form-row">
@@ -61,7 +61,7 @@
 <form>
     <div class="form-group">
         <label for="barcodeInput">Barcode: </label>
-        <input type="text" class="request-param form-control" id="barcodeInput" name="barcode"/>
+        <input type="text" class="request-param form-control" id="barcodeInput" name="barcode" placeholder="16位字符数字" value="170500101083CG12"/>
     </div>
     <div>
         <button type="button" class="btn btn-primary query" name="queryByBarcode">query</button>
@@ -72,7 +72,7 @@
 </div>
 </div>
 <div class="container">
-  <p id="result"></p>
+  <textarea id="result" readonly="readonly"></textarea>
 </div>
 <!-- <script src="/webjarsjs"></script> -->
 <!-- <script data-main="/js/app" src="/webjars/requirejs/require.min.js"></script> -->

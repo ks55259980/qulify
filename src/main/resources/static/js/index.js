@@ -1,4 +1,6 @@
 $(function() {
+    var maxSuggestInterval = 2 * 3600000;   // two hours
+
     var result = $('#result').text();
     var clipboard = new Clipboard('.clipboard-trigger', {
         text: function(trigger) {
@@ -29,6 +31,43 @@ $(function() {
         return '?' + param.slice(1);
     }
 
+    function validate(form) {
+        var $form = $(form), sure = true, button = $form.find('button.query')[0];
+        if (button.name === 'queryByInterval') {
+            var $startTimeInput = $('input#startTimeInput'),
+                $endTimeInput = $('input#endTimeInput'),
+                starttimestamp = parseInt($startTimeInput.val()),
+                endtimestamp = parseInt($endTimeInput.val());
+            if (starttimestamp > endtimestamp) {
+                sure = confirm('查询开始时间不能大于结束时间，依然查询?');
+                if (!sure) {
+                    setTimestamp($endTimeInput, starttimestamp);
+                }
+            } else if (endtimestamp - starttimestamp > maxSuggestInterval) {
+                sure = confirm('时间差太大会影响BARCODE系统性能，依然查询?');
+                if (!sure) {
+                    setTimestamp($endTimeInput, starttimestamp + maxSuggestInterval);
+                }
+            }
+        }
+        return sure;
+    }
+
+    function setTimestamp($timestamp, value) {
+        $timestamp.val(value);
+        var parent = $timestamp.parents('.form-row')[0];
+        var $datetime = $(parent).find('input.datetime');
+        var ts = parseInt(value);
+        var localisotime = new Date(ts - new Date().getTimezoneOffset() * 60000);
+        $datetime.val(localisotime.toISOString().slice(0, -8));
+    }
+
+    var defaultTimestamp = new Date().getTime() - 3600000;
+    $('input.timestamp').each(function() {
+        setTimestamp($(this), defaultTimestamp);
+        defaultTimestamp += 15 * 60000;
+    });
+
     $('input.datetime').on('change', function() {
         var $this = $(this);
         var parent = $this.parents('.form-row')[0];
@@ -38,11 +77,7 @@ $(function() {
 
     $('input.timestamp').on('change', function() {
         var $this = $(this);
-        var parent = $this.parents('.form-row')[0];
-        var $datetime = $(parent).find('input.datetime');
-        var ts = parseInt($this.val());
-        var localisotime = new Date(ts - new Date().getTimezoneOffset() * 60000);
-        $datetime.val(localisotime.toISOString().slice(0, -8));
+        setTimestamp($this, $this.val());
     });
 
     $('button.query').on('click', function() {
@@ -50,7 +85,7 @@ $(function() {
         var form = $btn.parents('form')[0];
         console.log('button ' + $btn.attr('name') + ' clicked');
         var requestUri = '/' + $btn.attr('name') + paramString(form);
-        if (confirm('confirm to send request: ' + requestUri)) {
+        if (validate(form) && confirm('confirm to send request: ' + requestUri)) {
             fetch(requestUri, {
                 credentials: 'same-origin',
             })

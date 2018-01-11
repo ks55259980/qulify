@@ -181,10 +181,10 @@
   </wsdl:binding>
   <wsdl:service name="WSQATracking">
     <wsdl:port name="WSQATrackingSoap" binding="tns:WSQATrackingSoap">
-      <soap:address location="http://172.31.146.84/barcodetest/BarCode.WebService/WSQATracking.asmx" />
+      <soap:address location="http://172.31.146.84/barcode/BarCode.WebService/WSQATracking.asmx" />
     </wsdl:port>
     <wsdl:port name="WSQATrackingSoap12" binding="tns:WSQATrackingSoap12">
-      <soap12:address location="http://172.31.146.84/barcodetest/BarCode.WebService/WSQATracking.asmx" />
+      <soap12:address location="http://172.31.146.84/barcode/BarCode.WebService/WSQATracking.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

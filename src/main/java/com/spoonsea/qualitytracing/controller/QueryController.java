@@ -34,6 +34,7 @@ public class QueryController {
             return barcodeQueryService.queryByBoxCode(boxCode);
         } catch (Exception ex) {
             logger.warn("query by box code failed: {}", ex.getMessage());
+            ex.printStackTrace();
             return new BarcodeQueryResult(-1, ex.getMessage(), null, null);
         }
     }
@@ -50,6 +51,7 @@ public class QueryController {
             return result;
         } catch (Exception ex) {
             logger.warn("query by interval failed: {}", ex.getMessage());
+            ex.printStackTrace();
             return new BarcodeQueryResult(-1, ex.getMessage(), null, null);
         }
     }
@@ -61,6 +63,7 @@ public class QueryController {
             return barcodeQueryService.queryByBarcode(barcode);
         } catch (Exception ex) {
             logger.warn("query by barcode failed: {}", ex.getMessage());
+            ex.printStackTrace();
             return new BarcodeQueryResult(-1, ex.getMessage(), null, null);
         }
     }
