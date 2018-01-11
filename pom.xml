@@ -30,6 +30,7 @@
 			<id>dev</id>
 			<properties>
 				<env>dev</env>
+				<wsdl>WSQATracking.wsdl</wsdl>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -39,8 +40,16 @@
 			<id>test</id>
 			<properties>
 				<env>test</env>
+				<wsdl>WSQATracking.wsdl</wsdl>
 			</properties>
 		</profile>
+		<profile>
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+                <wsdl>WSQATracking-prod.wsdl</wsdl>
+            </properties>
+        </profile>
 	</profiles>
 
 	<dependencies>
@@ -95,9 +104,14 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
+			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator</artifactId>
+			<version>0.32-1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.7</version>
 		</dependency>
 	</dependencies>
 
@@ -107,6 +121,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<configuration>
+					<contextReloadable>true</contextReloadable>
+					<uriEncoding>UTF-8</uriEncoding>
+					<path>/</path>
+					<port>10080</port>
+				</configuration>
+				<version>2.2</version>
 			</plugin>
 			<!-- tag::wsdl[] -->
 			<plugin>
@@ -132,7 +157,7 @@
 				<configuration>
 					<schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
 					<schemaIncludes>
-						<include>*.wsdl</include>
+						<include>${wsdl}</include>
 					</schemaIncludes>
 				</configuration>
 			</plugin>
@@ -145,13 +170,10 @@
 			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
-				<includes>
-				    <include>static/**</include>
-				    <include>templates/**</include>
-				</includes>
 				<excludes>
 					<exclude>filter/**</exclude>
 					<exclude>config/**</exclude>
+					<exclude>wsdl/**</exclude>
 				</excludes>
 				<filtering>false</filtering>
 			</resource>

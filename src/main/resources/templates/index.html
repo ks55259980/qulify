@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Query Test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/css/index.css" th:href="@{/css/index.css}" />
+</head>
+<body>
+
+<div class="container">
+<h1 class="display-3">1.Query by Box Code</h1>
+<form>
+    <div class="form-group">
+        <label for="boxCodeInput">boxCode: </label>
+        <input type="text" class="request-param form-control" id="boxCodeInput" name="boxCode"/>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary query" name="queryByBoxCode">query</button>
+    </div>
+</form>
+<h1 class="display-3">2.Query by Time Interval</h1>
+<form>
+    <div class="form-row">
+	    <div class="form-group">
+	        <label for="factoryCodeInput">FactoryCode: </label>
+	        <input type="text" class="request-param form-control" id="factoryCodeInput" name="factoryCode"/>
+	    </div>
+    </div>
+    <div class="form-row">
+	    <div class="form-group">
+	        <label for="lineCodeInput">LineCode: </label>
+	        <input type="text" class="request-param form-control" id="lineCodeInput" name="lineCode"/>
+	    </div>
+    </div>
+    <div class="form-row">
+	    <div class="form-group col-md-6">
+	        <label for="startDateInput">StartTime: </label>
+	        <input type="datetime-local" class="form-control datetime" id="startDateInput" name="startDate"/>
+	    </div>
+	    <div class="form-group col-md-6">
+	       <label for="startTimeInput">&nbsp;</label>
+	       <input type="text" class="form-control request-param timestamp" name="startTime" id="startTimeInput"/>
+	    </div>
+	</div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="endDateInput">EndTime: </label>
+            <input type="datetime-local" class="form-control datetime" id="endDateInput" name="endDate"/>
+        </div>
+        <div class="form-group col-md-6">
+           <label for="endTimeInput">&nbsp;</label>
+           <input type="text" class="form-control request-param timestamp" name="endTime" id="endTimeInput"/>
+        </div>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary query" name="queryByInterval">query</button>
+    </div>
+</form>
+<h1 class="display-3">3.Query by Barcode</h1>
+<form>
+    <div class="form-group">
+        <label for="barcodeInput">Barcode: </label>
+        <input type="text" class="request-param form-control" id="barcodeInput" name="barcode"/>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary query" name="queryByBarcode">query</button>
+    </div>
+</form>
+<div>
+    <h1 class="display-3 inline">Result<button class="btn btn-secondary clipboard-trigger" style="margin-left: 1em;" type="button">copy</button></h1>
+</div>
+</div>
+<div class="container">
+  <p id="result"></p>
+</div>
+<!-- <script src="/webjarsjs"></script> -->
+<!-- <script data-main="/js/app" src="/webjars/requirejs/require.min.js"></script> -->
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/js/clipboard.min.js" th:src="@{/js/clipboard.min.js}"></script>
+<script src="../static/js/index.js" th:src="@{/js/index.js}"></script> 
+</body>
+</html>
