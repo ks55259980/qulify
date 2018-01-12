@@ -21,12 +21,6 @@ public class QueryController {
     @Autowired
     private BarcodeQueryService barcodeQueryService;
 
-    @RequestMapping("/test")
-    @ResponseBody
-    public String queryTest() {
-        return "hello world";
-    }
-
     @RequestMapping("/queryByBoxCode")
     @ResponseBody
     public BarcodeQueryResult queryByBoxCode(@RequestParam String boxCode) {
