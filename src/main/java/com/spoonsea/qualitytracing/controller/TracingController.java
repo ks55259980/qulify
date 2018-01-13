@@ -37,7 +37,7 @@ public class TracingController {
     
     @RequestMapping("/tracingByCapCode")
     @ResponseBody
-    public String tracingByCapCode(@RequestParam("capCode") String capCode) {
+    public String tracingByCapCode(@RequestParam("capCode") String capCode) throws IOException {
         return tracingService.tracingByCapCode(capCode);
     }
 

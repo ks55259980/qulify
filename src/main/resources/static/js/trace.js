@@ -15,6 +15,14 @@ $(function () {
         return '?' + param.slice(1);
     }
 
+    function showChart(data) {
+        if (data.type === 'sankey') {
+            showSankeyView(data);
+        } else if (data.type === 'tree') {
+            showTreeView(data);
+        }
+    }
+
     function showTreeView(data) {
         myChart.setOption(option = {
             tooltip: {
@@ -41,8 +49,8 @@ $(function () {
                     type: 'category',
                     boundaryGap: false,
                     data: data.from.processes,
-                    top: '5%',
-                    bottom: '28%',
+                    top: '10%',
+                    bottom: '35%',
                     right: '20%',
                     axisLabel: {
                         interval: 0
@@ -53,8 +61,8 @@ $(function () {
                     type: 'category',
                     boundaryGap: false,
                     data: data.to.processes,
-                    top: '70%',
-                    bottom: '5%',
+                    top: '80%',
+                    bottom: '10%',
                     right: '20%',
                     axisLabel: {
                         interval: 0
@@ -66,72 +74,74 @@ $(function () {
                     type: 'tree',
                     name: 'Production',
                     data: [data.from.data],
-                    top: '5%',
+                    top: '10%',
                     left: '7%',
-                    bottom: '70%',
+                    bottom: '40%',
                     right: '20%',
                     symbolSize: 7,
                     label: {
                         normal: {
-                            position: 'left',
-                            verticalAlign: 'middle',
-                            align: 'right'
+                            position: 'bottom',
+                            horizontalAlign: 'middle',
+                            align: 'middle'
                         }
                     },
                     leaves: {
                         label: {
                             normal: {
-                                position: 'right',
-                                verticalAlign: 'middle',
-                                align: 'left'
+                                position: 'bottom',
+                                horizontalAlign: 'middle',
+                                align: 'middle'
                             }
                         }
                     },
-                    expandAndCollapse: true,
+                    expandAndCollapse: false,
                     animationDuration: 550,
                     animationDurationUpdate: 750
                 },
                 {
                     singleAxisIndex: 0,
                     coordinateSystem: 'singleAxis',
-                    type: 'line',
+                    type: 'scatter',
                     data: [],
+                    symbolSize: 0
                 },
                 {
                     type: 'tree',
                     name: 'Logistics',
                     data: [data.to.data],
 
-                    top: '30%',
+                    top: '80%',
                     left: '7%',
-                    bottom: '5%',
+                    bottom: '15%',
                     right: '20%',
                     symbolSize: 7,
                     label: {
                         normal: {
-                            position: 'left',
-                            verticalAlign: 'middle',
-                            align: 'right'
+                            position: 'bottom',
+                            horizontalAlign: 'middle',
+                            align: 'middle'
                         }
                     },
                     leaves: {
                         label: {
                             normal: {
-                                position: 'right',
-                                verticalAlign: 'middle',
-                                align: 'left'
+                                position: 'bottom',
+                                horizontalAlign: 'middle',
+                                align: 'middle'
                             }
                         }
                     },
-                    expandAndCollapse: true,
+                    expandAndCollapse: false,
                     animationDuration: 550,
                     animationDurationUpdate: 750
                 },
                 {
                     singleAxisIndex: 1,
                     coordinateSystem: 'singleAxis',
-                    type: 'line',
+                    type: 'scatter',
                     data: [],
+                    symbolSize: 0
                 }
             ]
         });
@@ -160,9 +170,16 @@ $(function () {
                     },
                     lineStyle: {
                         normal: {
-                            curveness: 0
+                            curveness: 0.5
                         }
-                    }
+                    },
+                    label: {
+                        normal: {
+                            position: 'bottom',
+                            horizontalAlign: 'middle',
+                            align: 'middle'
+                        }
+                    },
                 }
             ]
         });
@@ -196,9 +213,14 @@ $(function () {
         var form = this.form;
         var requestUri = '/' + this.name + paramString(form);
         console.log('button ' + this.name + ' clicked');
+        myChart.clear();
         myChart.showLoading();
         fetch(requestUri, {
             credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=utf-8'
+            },
         }).then(function (response) {
             if (response.ok) {
                 return response.json();
@@ -206,7 +228,7 @@ $(function () {
             throw new Error(response.status);
         }).then(function (data) {
             myChart.hideLoading();
-            showTreeView(data);
+            showChart(data);
         }).catch(function (e) {
             myChart.hideLoading();
             console.error('fetch error: ' + e.message);
