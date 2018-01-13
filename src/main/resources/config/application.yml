@@ -8,6 +8,8 @@ spring:
     lims:
       url: @datasource.lims.url@
       driver-class-name: @datasource.lims.driver-class-name@
+      username: @datasource.lims.username@
+      password: @datasource.lims.password@
   jpa:
     show-sql: true
     hibernate:

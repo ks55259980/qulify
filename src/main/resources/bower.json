@@ -1,0 +1,21 @@
+{
+  "name": "qualitytracing",
+  "authors": [
+    "yuanmingyi <millan.yuan@gmail.com>"
+  ],
+  "description": "",
+  "main": "templates/trace.html",
+  "keywords": [
+    "trace"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
