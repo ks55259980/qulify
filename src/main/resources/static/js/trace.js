@@ -1,7 +1,74 @@
 $(function () {
     // var $nav = $('ul.nav'), $navbars = $nav.find('li'), $pages = $('div.page');
     var myChart = echarts.init($('#echarts-region')[0]);
-    var webcam = initSourceWebcam();
+    $('#dataModal').modal({
+        show: false
+    });
+
+    function setModalMaxHeight(element) {
+    	  this.$element     = $(element);  
+    	  this.$content     = this.$element.find('.modal-content');
+    	  var borderWidth   = this.$content.outerHeight() - this.$content.innerHeight();
+    	  var dialogMargin  = $(window).width() < 768 ? 20 : 60;
+    	  var contentHeight = $(window).height() - (dialogMargin + borderWidth);
+    	  var headerHeight  = this.$element.find('.modal-header').outerHeight() || 0;
+    	  var footerHeight  = this.$element.find('.modal-footer').outerHeight() || 0;
+    	  var maxHeight     = contentHeight - (headerHeight + footerHeight);
+
+    	  this.$content.css({
+    	      'overflow': 'hidden'
+    	  });
+    	  
+    	  this.$element
+    	    .find('.modal-body').css({
+    	      'max-height': maxHeight,
+    	      'overflow-y': 'auto'
+    	    });
+    	}
+
+    	$('.modal').on('show.bs.modal', function() {
+    	  $(this).show(); 
+    	  setModalMaxHeight(this);
+    	});
+
+    	$(window).resize(function() {
+    	  if ($('.modal.in').length == 1) {
+    	    setModalMaxHeight($('.modal.in'));
+    	  }
+    	});
+
+    var imgPath = $('input#img-path').val();
+    myChart.on('click', function (params) {
+        if (!!params.data.type) {
+            $('#dataModal img').attr('src', imgPath + params.data.type + '.jpg');
+            $('#dataModal').modal('show');
+        }
+    });
+
+    //var webcam = initSourceWebcam();
+    let scanner = new Instascan.Scanner({ video: $('#webcam')[0] });
+    var scanning = false;
+    scanner.addListener('scan', function (content) {
+        console.log(content);
+        $('input#cap-code-input').val(content);
+        $('#camModal').modal('hide');
+    });
+
+    $('#camModal').modal({ backdrop: 'static', show: false });
+    $('button.close').on('click', function () {
+        console.log('modal hide...');
+        if (scanning) {
+            closeScanner();
+        }
+    });
+
+    function closeScanner() {
+        scanner.stop().then(function() {
+            scanning = false;
+        }).catch(function(e) {
+            console.error(e);
+        });
+    }
 
     function paramString(form) {
         var param = '', $form = $(form);
@@ -185,27 +252,25 @@ $(function () {
         });
     }
 
-    // var setActiveTab = function (tab) {
-    //     var $tab = $(tab);
-    //     $navbars.each(function () {
-    //         var $this = $(this);
-    //         $this.removeClass('active');
-    //         $($this.children().attr('href')).hide();
-    //     });
-    //     $tab.parent().addClass('active');
-    //     $($tab.attr('href')).show();
-    // };
-
-    // setActiveTab($nav.find('a')[0]);
-
-    var scanning = false;
     $('button.scan').on('click', function () {
         if (scanning) {
-            $(webcam).remove();
-            scanning = false;
+            closeScanner();
+            $('#camModal').modal('hide');
         } else {
-            $('.camera-div').append(webcam);
             scanning = true;
+            Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                    //$('#webcam').show();
+                    scanner.start(cameras[0]);
+                    $('#camModal').modal('show');
+                } else {
+                    console.error('No cameras found.');
+                    scanning = false;
+                }
+            }).catch(function (e) {
+                console.error(e);
+                scanning = false;
+            });
         }
     });
 
