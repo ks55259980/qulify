@@ -10,7 +10,9 @@ spring:
     database-platform: org.hibernate.dialect.SQLServerDialect
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
+    naming:
+      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImp
 
 barcode-query:
   default-uri: http://172.31.193.174/barcodetest/BarCode.WebService/WSQATracking.asmx

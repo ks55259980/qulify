@@ -141,6 +141,7 @@ $(function () {
                     type: 'tree',
                     name: 'Production',
                     data: [data.from.data],
+                    direction: 'inverse',
                     top: '10%',
                     left: '7%',
                     bottom: '40%',
