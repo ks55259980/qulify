@@ -50,7 +50,7 @@ public class ReportController {
         return ResponseUtil.makeErrorResponse(-100, "unknown reportId: " + reportId);
     }
 
-    @RequestMapping("/")
+    @RequestMapping({"", "/"})
     public ResponseEntity<?> getReportList() {
         Map<String, Object> services = context.getBeansWithAnnotation(ReportServiceAnnotation.class);
         Map<String, List<Map<String, String>>> result = new HashMap<String, List<Map<String, String>>>();

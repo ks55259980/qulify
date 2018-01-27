@@ -23,7 +23,7 @@ barcode-query:
   default-uri: @default-uri@
 
 # security
-security:
-  user:
-    name: admin
-    password: admin
+#security:
+#  user:
+#    name: admin
+#    password: admin

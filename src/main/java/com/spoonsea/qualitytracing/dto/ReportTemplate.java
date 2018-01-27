@@ -3,7 +3,12 @@ package com.spoonsea.qualitytracing.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class ReportTemplate implements Serializable {
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+
+@JsonAutoDetect(fieldVisibility = Visibility.ANY, getterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
+public class ReportTemplate<T> implements Serializable {
 
     /**
      * 
@@ -14,11 +19,7 @@ public class ReportTemplate implements Serializable {
     private String reportId;
     private List<String> columnId;
     private List<String> columnName;
-    private List<ReportRecord> records;
-
-    public static ReportTemplate GenerateReport(String reportId) {
-        return null;
-    }
+    private List<T> records;
 
     public String getReportName() {
         return reportName;
@@ -52,11 +53,11 @@ public class ReportTemplate implements Serializable {
         this.columnName = columnName;
     }
 
-    public List<ReportRecord> getRecords() {
+    public List<T> getRecords() {
         return records;
     }
 
-    public void setRecords(List<ReportRecord> records) {
+    public void setRecords(List<T> records) {
         this.records = records;
     }
 
