@@ -41,12 +41,15 @@ import com.spoonsea.qualitytracing.service.ReportService;
 
 
 @Service
-@ReportServiceAnnotation(name=BraumatSakeReportService.reportName, id="BraumatSakeReport", category=Category.Brewing)
-public class BraumatSakeReportService implements ReportService<Map<String, String>> {
+@ReportServiceAnnotation(name=BraumatBrewReportService.reportName,
+id="BraumatBrewReport",
+category=Category.Brewing,
+enabled=false)
+public class BraumatBrewReportService implements ReportService<Map<String, String>> {
 
-    protected static final String reportName = "酿造清酒报表";
+    protected static final String reportName = "酿造糖化报表";
 
-    private static final Logger logger = LoggerFactory.getLogger(BraumatSakeReportService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BraumatBrewReportService.class);
 
     @Autowired
     private LimsService limsService;
@@ -78,7 +81,7 @@ public class BraumatSakeReportService implements ReportService<Map<String, Strin
         // 4. search the record between the two start record of step 3.
         // 5. return the reports
         Set<Brau33> result = new HashSet<Brau33>();
-        List<Sake> sakeList = limsService.getSakeList(code);
+        List<Sake> sakeList = limsService.getSakeListWithWineID(code);
         for (Sake sake: sakeList) {
             DateTime dt = getFullSakeDateTime(sake);
             String teilanl = "BBT" + sake.getSakeTank();

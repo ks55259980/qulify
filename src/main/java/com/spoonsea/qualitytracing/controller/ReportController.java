@@ -25,7 +25,7 @@ public class ReportController {
 
     @Autowired
     @Qualifier("Reports")
-    private Map<String, Map<String, List<Map<String, Object>>>> reports;
+    private Map<String, List<Map<String, Object>>> reports;
 
     @Autowired
     @Qualifier("ReportServices")

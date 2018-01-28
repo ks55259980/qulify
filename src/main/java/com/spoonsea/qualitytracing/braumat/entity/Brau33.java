@@ -10,9 +10,10 @@ import java.math.BigInteger;
  * 
  */
 @Entity
+@IdClass(BraumatKey.class)
 @Table(name="brau33")
 @NamedQuery(name="Brau33.findAll", query="SELECT b FROM Brau33 b")
-public class Braumat implements Serializable {
+public class Brau33 implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="AUFTR_NR")
@@ -120,6 +121,7 @@ public class Braumat implements Serializable {
 	@Column(name="DIM_DFM9")
 	private String dimDfm9;
 
+	@Id
 	@Column(name="end_ts")
 	private BigInteger endTs;
 
@@ -145,6 +147,7 @@ public class Braumat implements Serializable {
 	@Column(name="GOP_NAME")
 	private String gopName;
 
+	@Id
 	@Column(name="GOP_NR")
 	private int gopNr;
 
@@ -473,6 +476,7 @@ public class Braumat implements Serializable {
 	@Column(name="ROP_ID")
 	private int ropId;
 
+	@Id
 	@Column(name="start_ts")
 	private BigInteger startTs;
 
@@ -597,13 +601,14 @@ public class Braumat implements Serializable {
 	@Column(name="TEILANL")
 	private String teilanl;
 
+	@Id
 	@Column(name="TEILANL_NR")
 	private int teilanlNr;
 
 	@Column(name="USRPROT_ID")
 	private int usrprotId;
 
-	public Braumat() {
+	public Brau33() {
 	}
 
 	public int getAuftrNr() {
@@ -1837,5 +1842,48 @@ public class Braumat implements Serializable {
 	public void setUsrprotId(int usrprotId) {
 		this.usrprotId = usrprotId;
 	}
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((endTs == null) ? 0 : endTs.hashCode());
+        result = prime * result + ((gopName == null) ? 0 : gopName.hashCode());
+        result = prime * result + ((startTs == null) ? 0 : startTs.hashCode());
+        result = prime * result + ((teilanl == null) ? 0 : teilanl.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Brau33 other = (Brau33) obj;
+        if (endTs == null) {
+            if (other.endTs != null)
+                return false;
+        } else if (!endTs.equals(other.endTs))
+            return false;
+        if (gopName == null) {
+            if (other.gopName != null)
+                return false;
+        } else if (!gopName.equals(other.gopName))
+            return false;
+        if (startTs == null) {
+            if (other.startTs != null)
+                return false;
+        } else if (!startTs.equals(other.startTs))
+            return false;
+        if (teilanl == null) {
+            if (other.teilanl != null)
+                return false;
+        } else if (!teilanl.equals(other.teilanl))
+            return false;
+        return true;
+    }
 
 }

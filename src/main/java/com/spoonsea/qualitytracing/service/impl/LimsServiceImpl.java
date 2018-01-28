@@ -17,31 +17,35 @@ import com.spoonsea.qualitytracing.lims.model.Broth;
 import com.spoonsea.qualitytracing.lims.model.Sake;
 import com.spoonsea.qualitytracing.service.LimsService;
 
+
 @Service
 public class LimsServiceImpl implements LimsService {
 
-   private static final Logger logger = LoggerFactory.getLogger(LimsServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(LimsServiceImpl.class);
 
-   @Autowired
-   private BarcodeRepository barcodeRepo;
+    @Autowired
+    private BarcodeRepository barcodeRepo;
 
-   @Autowired
-   private SakeRepository sakeRepo;
+    @Autowired
+    private SakeRepository sakeRepo;
 
-   @Autowired
-   private BrothRepository brothRepo;
+    @Autowired
+    private BrothRepository brothRepo;
 
-   private Barcode getBarcode(CodeInfo code) {
-       List<Barcode> barcodeList = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByTimeDesc(code.getLine(), code.getDate(), code.getTime());
-       if (barcodeList.isEmpty()) {
-           logger.warn("barcode not found for: line={}, date={}, time={}", code.getLine(), code.getDate(), code.getTime());
-           return null;
-       }
-       Barcode barcode = barcodeList.get(0);
-       logger.info("barcode: hid={}, workshop={}", barcode.getHid(), barcode.getPackagingLine());
-       return barcode;
-   }
+    private Barcode getBarcode(CodeInfo code) {
+        List<Barcode> barcodeList = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByTimeDesc(
+                code.getLine(), code.getDate(), code.getTime());
+        if (barcodeList.isEmpty()) {
+            logger.warn("barcode not found for: line={}, date={}, time={}", code.getLine(), code.getDate(),
+                    code.getTime());
+            return null;
+        }
+        Barcode barcode = barcodeList.get(0);
+        logger.info("barcode: hid={}, workshop={}", barcode.getHid(), barcode.getPackagingLine());
+        return barcode;
+    }
 
+    @Override
     public List<Sake> getSakeList(CodeInfo code) {
         Barcode barcode = getBarcode(code);
         if (barcode == null) {
@@ -51,12 +55,23 @@ public class LimsServiceImpl implements LimsService {
         return sakeList;
     }
 
+    @Override
     public List<Broth> getBrothList(CodeInfo code) {
         Barcode barcode = getBarcode(code);
         if (barcode == null) {
             return Arrays.asList();
         }
         List<Broth> sakeList = brothRepo.findByHidLike(barcode.getSid());
+        return sakeList;
+    }
+
+    @Override
+    public List<Sake> getSakeListWithWineID(CodeInfo code) {
+        Barcode barcode = getBarcode(code);
+        if (barcode == null) {
+            return Arrays.asList();
+        }
+        List<Sake> sakeList = sakeRepo.findByHidAndWineIDNotNull(barcode.getHid());
         return sakeList;
     }
 

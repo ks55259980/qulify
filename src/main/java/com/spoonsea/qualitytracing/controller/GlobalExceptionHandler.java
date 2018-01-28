@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseEntity<?> defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
         e.printStackTrace();
-        return ResponseUtil.makeErrorResponse(-1, e.getMessage());
+        return ResponseUtil.makeErrorResponse(-1, "内部错误");
     }
 
 }
