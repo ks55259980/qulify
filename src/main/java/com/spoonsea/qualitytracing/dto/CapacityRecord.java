@@ -22,7 +22,7 @@ public class CapacityRecord implements Serializable {
     private String BottleType;
 
     @JsonSerialize(using = BigDecimalSerializer.class)
-    private BigDecimal WineValue;
+    private BigDecimal WineValve;
 
     @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal Capacity;
@@ -40,7 +40,7 @@ public class CapacityRecord implements Serializable {
         Workshop = workshop;
         Variety = variety;
         BottleType = bottleType;
-        WineValue = wineValue;
+        WineValve = wineValue;
         Capacity = capacity;
         this.conclusion = conclusion;
         Remark = remark;
@@ -102,12 +102,12 @@ public class CapacityRecord implements Serializable {
         BottleType = bottleType;
     }
 
-    public BigDecimal getWineValue() {
-        return WineValue;
+    public BigDecimal getWineValve() {
+        return WineValve;
     }
 
-    public void setWineValue(BigDecimal wineValue) {
-        WineValue = wineValue;
+    public void setWineValve(BigDecimal wineValue) {
+        WineValve = wineValue;
     }
 
     public BigDecimal getCapacity() {
