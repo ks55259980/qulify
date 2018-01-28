@@ -21,39 +21,39 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "barcodeEntityManagerFactory", transactionManagerRef = "barcodeTransactionManager", basePackages = {
-        BarcodeJpaConfig.basePackage })
-public class BarcodeJpaConfig {
+@EnableJpaRepositories(entityManagerFactoryRef = "braumatEntityManagerFactory", transactionManagerRef = "braumatTransactionManager", basePackages = {
+        BraumatJpaConfig.basePackage })
+public class BraumatJpaConfig {
 
-    public static final String basePackage = "com.spoonsea.qualitytracing.barcode";
+    public static final String basePackage = "com.spoonsea.qualitytracing.braumat";
 
     private final String persistenceUnit = this.getClass().getSimpleName();
 
     @Autowired
-    @Qualifier("barcodeDataSource")
+    @Qualifier("braumatDataSource")
     private DataSource dataSource;
 
     @Autowired
     private JpaProperties jpaProperties;
 
-    @Bean("barcodeEntityManager")
+    @Bean("braumatEntityManager")
     @Primary
     public EntityManager entityManager(EntityManagerFactoryBuilder builder) {
         return entityManagerFactory(builder).getObject().createEntityManager();
     }
 
-    @Bean("barcodeEntityManagerFactory")
+    @Bean("braumatEntityManagerFactory")
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder) {
         return builder.dataSource(dataSource).properties(getVendorProperties(dataSource))
-                .packages(BarcodeJpaConfig.basePackage).persistenceUnit(persistenceUnit).build();
+                .packages(BraumatJpaConfig.basePackage).persistenceUnit(persistenceUnit).build();
     }
 
     private Map<String, String> getVendorProperties(DataSource dataSource) {
         return jpaProperties.getHibernateProperties(dataSource);
     }
 
-    @Bean("barcodeTransactionManager")
+    @Bean("braumatTransactionManager")
     @Primary
     PlatformTransactionManager transactionManager(EntityManagerFactoryBuilder builder) {
         return new JpaTransactionManager(entityManagerFactory(builder).getObject());

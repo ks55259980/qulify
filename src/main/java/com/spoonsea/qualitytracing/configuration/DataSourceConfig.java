@@ -14,8 +14,8 @@ public class DataSourceConfig {
 
     @Bean
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.barcode")
-    public DataSource barcodeDataSource() {
+    @ConfigurationProperties(prefix = "spring.datasource.braumat")
+    public DataSource braumatDataSource() {
         return DataSourceBuilder.create().build();
     }
 

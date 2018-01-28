@@ -16,4 +16,5 @@ public @interface ReportServiceAnnotation {
     String id();
     String name();
     String category();
+    boolean enabled() default true;
 }

@@ -19,7 +19,6 @@ import com.spoonsea.qualitytracing.configuration.ReportServiceAnnotation;
 import com.spoonsea.qualitytracing.constant.Constants.Category;
 import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.CapacityRecord;
-import com.spoonsea.qualitytracing.dto.ReportRecord;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
 import com.spoonsea.qualitytracing.lims.dao.ArLottabRepository;
 import com.spoonsea.qualitytracing.lims.dao.BarcodeRepository;
@@ -31,7 +30,7 @@ import com.spoonsea.qualitytracing.lims.model.Report_Detail;
 import com.spoonsea.qualitytracing.service.ReportService;
 
 
-@Service("CapacityReport")
+@Service
 @ReportServiceAnnotation(name=CapacityReportService.reportName, id="CapacityReport", category=Category.Packaging)
 public class CapacityReportService implements ReportService<CapacityRecord> {
 

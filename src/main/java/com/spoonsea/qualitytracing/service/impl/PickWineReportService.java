@@ -30,7 +30,7 @@ import com.spoonsea.qualitytracing.lims.model.Report_Detail;
 import com.spoonsea.qualitytracing.service.ReportService;
 
 
-@Service("PickWineReport")
+@Service
 @ReportServiceAnnotation(name=PickWineReportService.reportName, id="PickWineReport", category=Category.Packaging)
 public class PickWineReportService implements ReportService<PickWineRecord> {
 
