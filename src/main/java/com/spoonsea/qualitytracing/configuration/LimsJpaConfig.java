@@ -47,7 +47,9 @@ public class LimsJpaConfig {
     }
 
     private Map<String, String> getVendorProperties(DataSource dataSource) {
-        return jpaProperties.getHibernateProperties(dataSource);
+        Map<String, String> properties = jpaProperties.getHibernateProperties(dataSource);
+        properties.put("hibernate.dialect", "org.hibernate.dialect.SQLServer2008Dialect");
+        return properties;
     }
 
     @Bean("limsTransactionManager")
