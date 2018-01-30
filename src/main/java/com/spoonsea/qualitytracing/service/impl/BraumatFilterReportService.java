@@ -45,7 +45,7 @@ import com.spoonsea.qualitytracing.service.ReportService;
 id="BraumatFilterReport",
 category=Category.Brewing,
 enabled=false)
-public class BraumatFilterReportService implements ReportService<Map<String, String>> {
+public class BraumatFilterReportService extends BaseBraumatReportService implements ReportService<Map<String, String>> {
 
     protected static final String reportName = "酿造过滤报表";
 
@@ -63,83 +63,11 @@ public class BraumatFilterReportService implements ReportService<Map<String, Str
     public String getReportId() {
         return this.getClass().getAnnotation(ReportServiceAnnotation.class).id();
     }
-    
-    private DateTime getFullSakeDateTime(Sake sake) {
-        String dateStr = String.format("%s %s", sake.getDate(), sake.getFullTankTime().substring(0, 2));
-        logger.info("local date string from sake: {}", dateStr);
-        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH");
-        DateTime dt = DateTime.parse(dateStr, format).toDateTime(DateTimeZone.getDefault()).withZone(DateTimeZone.UTC);
-        logger.info("local date time from sake in UTC: {}", dt.toString());
-        return dt;
-    }
 
     @Override
     public ReportTemplate<Map<String, String>> getReport(CodeInfo code) {
-        // 1. find the full sake record in barcode table
-        // 2. use the full sake time and sake number to query the braumat lab_check record
-        // 3. find the first start record around lab_check record
-        // 4. search the record between the two start record of step 3.
-        // 5. return the reports
         Set<Brau33> result = new HashSet<Brau33>();
-        List<Sake> sakeList = limsService.getSakeListWithWineID(code);
-        for (Sake sake: sakeList) {
-            DateTime dt = getFullSakeDateTime(sake);
-            String teilanl = "BBT" + sake.getSakeTank();
-            Brau33 labCheck = braumatRepo.findOneBySzJahrAndSzMonatAndSzTagAndSzStundeAndTeilanl(
-                    dt.getYear() % 2000, dt.getMonthOfYear(), dt.getDayOfMonth(), dt.getHourOfDay(), teilanl);
-            if (labCheck != null) {
-                Brau33 first = braumatRepo.findTop1ByTeilanlAndGopNameAndEndTsLessThanOrderByStartTsDesc(teilanl, "End", labCheck.getStartTs());
-                Brau33 last = braumatRepo.findTop1ByTeilanlAndGopNameAndStartTsGreaterThanOrderByStartTsAsc(teilanl, "Start", labCheck.getEndTs());
-                List<Brau33> all = braumatRepo.findByTeilanlAndStartTsGreaterThanAndEndTsLessThan(teilanl, first.getEndTs(), last.getStartTs());
-                result.addAll(all);
-            }
-        }
         return generateReport(result.stream().collect(Collectors.toList()));
-    }
-
-    public ReportTemplate<Map<String, String>> generateReport(List<Brau33> records) {
-        List<String> columnId = new ArrayList<String>();
-        List<String> columnName = new ArrayList<String>();
-        
-        columnId.addAll(Arrays.asList("startTs","endTs","teilanl", "gopName", "paramCount"));
-        columnName.addAll(Arrays.asList("开始时间","结束时间","工艺单元名称","工艺步骤名称", "参数个数"));
-        List<Map<String, String>> ret = new ArrayList<Map<String, String>>();
-        for (Brau33 rec: records) {
-            Map<String,String> result = new HashMap<String, String>();    
-            result.put("startTs", new Date(rec.getStartTs().longValue() * 1000).toLocaleString());
-            result.put("endTs", new Date(rec.getEndTs().longValue() * 1000).toLocaleString());
-            result.put("teilanl", rec.getTeilanl());
-            result.put("gopName", rec.getGopName());
-            result.put("paramCount", Integer.toString(rec.getDfmAnz()));
-            for (int i = 0; i < rec.getDfmAnz(); i++) {
-                try {
-                    String dim = (String) Brau33.class.getDeclaredField("dimDfm" + i).get(rec);
-                    result.put("param" + i, (String) Brau33.class.getDeclaredField("nameDfm" + i).get(rec));
-                    result.put("paramset" + i, (String) Brau33.class.getDeclaredField("swDfm" + i).get(rec) + dim);
-                    result.put("paramval" + i, (String) Brau33.class.getDeclaredField("iwDfm" + i).get(rec) + dim);
-                    if (columnId.size() < 5 + (i + 1) * 3) {
-                        columnId.add("param" + i);
-                        columnId.add("paramset" + i);
-                        columnId.add("paramval" + i);
-                        columnName.add("参数" + i);
-                        columnName.add("参数" + i + "设定值");
-                        columnName.add("参数" + i + "实际值");
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    break;
-                }
-            }
-            ret.add(result);
-        }
-        
-        ReportTemplate<Map<String, String>> report = new ReportTemplate<Map<String, String>>();
-        report.setColumnId(columnId);
-        report.setColumnName(columnName);
-        report.setReportId(getReportId());
-        report.setReportName(reportName);
-        report.setRecords(ret);
-        return report;
     }
 
     @Override
