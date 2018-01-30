@@ -20,7 +20,6 @@ import com.spoonsea.qualitytracing.constant.Constants.Category;
 import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.CapacityRecord;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
-import com.spoonsea.qualitytracing.lims.dao.ArLottabRepository;
 import com.spoonsea.qualitytracing.lims.dao.BarcodeRepository;
 import com.spoonsea.qualitytracing.lims.dao.CapacityRepository;
 import com.spoonsea.qualitytracing.lims.dao.Report_DetailRepository;
@@ -38,9 +37,6 @@ public class CapacityReportService implements ReportService<CapacityRecord> {
 
     private static final Logger logger = LoggerFactory.getLogger(CapacityReportService.class);
 
-    @Autowired
-    private ArLottabRepository arlottabRepo;
-    
     @Autowired
     private BarcodeRepository barcodeRepo;
     

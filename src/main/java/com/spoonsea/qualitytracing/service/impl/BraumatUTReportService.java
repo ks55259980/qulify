@@ -21,14 +21,13 @@ import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
 import com.spoonsea.qualitytracing.lims.model.BarcodeBroth;
 import com.spoonsea.qualitytracing.service.LimsService;
-import com.spoonsea.qualitytracing.service.ReportService;
 
 
 @Service
 @ReportServiceAnnotation(name="酿造发酵报表",
 id="BraumatUTReport",
 category=Category.Brewing)
-public class BraumatUTReportService extends BaseBraumatReportService implements ReportService<Map<String, String>> {
+public class BraumatUTReportService extends BaseBraumatReportService {
 
     private static final Logger logger = LoggerFactory.getLogger(BraumatUTReportService.class);
 
@@ -41,14 +40,15 @@ public class BraumatUTReportService extends BaseBraumatReportService implements 
     public ReportTemplate<Map<String, String>> getReport(List<BarcodeBroth> brothList) {
     		Set<Brau33> result = new HashSet<Brau33>();
     		logger.info("barcode broth found: {}", brothList.size());
+    		String rezTyp = "UT";
     		for (BarcodeBroth broth: brothList) {
             DateTime dt = getDateTime(broth.getDate(), broth.getTime());
-            String teilanl = "UT" + broth.getFermenter();
+            String teilanl = rezTyp + broth.getFermenter();
             logger.info("teilanl: {}, dt: {}", teilanl, dt);
-            Brau33 record = braumatRepo.findOneByTeilanlAndStartTsLessThanEqualAndEndTsGreaterThanEqual(
-            		teilanl, BigInteger.valueOf(dt.getMillis() / 1000), BigInteger.valueOf(dt.getMillis() / 1000));
+            Brau33 record = braumatRepo.findOneByRezTypAndTeilanlAndStartTsLessThanEqualAndEndTsGreaterThanEqual(
+            		rezTyp, teilanl, BigInteger.valueOf(dt.getMillis() / 1000), BigInteger.valueOf(dt.getMillis() / 1000));
             if (record != null) {
-                List<Brau33> all = braumatRepo.findByTeilanlAndAuftrNrAndChargNr(teilanl, record.getAuftrNr(), record.getChargNr());
+                List<Brau33> all = braumatRepo.findByRezTypAndTeilanlAndAuftrNrAndChargNr(rezTyp, teilanl, record.getAuftrNr(), record.getChargNr());
                 result.addAll(all);
             }
         }

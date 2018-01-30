@@ -15,10 +15,11 @@ import org.slf4j.LoggerFactory;
 
 import com.spoonsea.qualitytracing.braumat.entity.Brau33;
 import com.spoonsea.qualitytracing.configuration.ReportServiceAnnotation;
-import com.spoonsea.qualitytracing.dto.ReportTemplate;
+import com.spoonsea.qualitytracing.dto.MapReport;
+import com.spoonsea.qualitytracing.service.ReportService;
 
 
-public class BaseBraumatReportService {
+public abstract class BaseBraumatReportService implements ReportService<Map<String, String>> {
     
 	private static final Logger logger = LoggerFactory.getLogger(BaseBraumatReportService.class);
 
@@ -45,7 +46,7 @@ public class BaseBraumatReportService {
 		return this.getClass().getAnnotation(ReportServiceAnnotation.class).name();
 	}
 
-	public ReportTemplate<Map<String, String>> generateReport(List<Brau33> records) {
+	public MapReport generateReport(List<Brau33> records) {
         List<String> columnId = new ArrayList<String>();
         List<String> columnName = new ArrayList<String>();
 
@@ -96,7 +97,7 @@ public class BaseBraumatReportService {
 			return s1.get("id").compareTo(s2.get("id"));
 		});
 
-        ReportTemplate<Map<String, String>> report = new ReportTemplate<Map<String, String>>();
+        MapReport report = new MapReport();
         report.setColumnId(columnId);
         report.setColumnName(columnName);
         report.setReportId(this.getReportId());
