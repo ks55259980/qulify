@@ -57,11 +57,11 @@ public abstract class BaseLimsReportService<T> implements ReportService<Map<Stri
 			}
 			List<Report_Detail> reportDetails = reportDetailRepo.findByPacket(tableName);
 			columnMap = new HashMap<String, String>();
-			columnName = new ArrayList<String>();
 			fieldMap = new HashMap<String, String>();
 			for (Report_Detail record : reportDetails) {
 				columnMap.put(record.getEnglish(), record.getChinese());
 			}
+			columnName = columnList.stream().map(c -> columnMap.getOrDefault(c, c)).collect(Collectors.toList());
 			for (Field field : clz.getDeclaredFields()) {
 				String name = field.getName();
 				if (field.isAnnotationPresent(Column.class) &&
@@ -70,7 +70,6 @@ public abstract class BaseLimsReportService<T> implements ReportService<Map<Stri
 				}
 				if (columnList.contains(name)) {
 					fieldMap.put(name, field.getName());
-					columnName.add(columnMap.getOrDefault(name, name));
 				}
 			}
 		}

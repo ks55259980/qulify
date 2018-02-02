@@ -16,4 +16,10 @@ public interface BarcodeRepository extends JpaRepository<Barcode, Integer> {
 
 	Barcode findOneByBarcode(String barcode);
 
+	List<Barcode> findBySidLike(String sid);
+
+//	Barcode findOneBySidLikeOrderByDateAndTimeAsc(String sid);
+//
+//	Barcode findOneByHidOrderByDateAndTimeAsc(String hid);
+
 }

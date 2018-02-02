@@ -5,11 +5,27 @@ spring:
       driver-class-name: @datasource.braumat.driver-class-name@
       username: @datasource.braumat.username@
       password: @datasource.braumat.password@
+      max-idle: 10
+      max-wait: 10000
+      min-idle: 5
+      initial-size: 5
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 18800
     lims:
       url: @datasource.lims.url@
       driver-class-name: @datasource.lims.driver-class-name@
       username: @datasource.lims.username@
       password: @datasource.lims.password@
+      max-idle: 10
+      max-wait: 10000
+      min-idle: 5
+      initial-size: 5
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 18800
   jpa:
     show-sql: true
     hibernate:

@@ -2,9 +2,7 @@ package com.spoonsea.qualitytracing.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -13,14 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spoonsea.qualitytracing.dto.CodeInfo;
-import com.spoonsea.qualitytracing.dto.FinishedWineRecord;
 import com.spoonsea.qualitytracing.lims.dao.ArLottabRepository;
 import com.spoonsea.qualitytracing.lims.dao.BarcodeBrothRepository;
 import com.spoonsea.qualitytracing.lims.dao.BarcodeRepository;
 import com.spoonsea.qualitytracing.lims.dao.BrothRepository;
 import com.spoonsea.qualitytracing.lims.dao.SakeRepository;
 import com.spoonsea.qualitytracing.lims.model.ArLottab;
-import com.spoonsea.qualitytracing.lims.model.AuxiliaryMaterial;
 import com.spoonsea.qualitytracing.lims.model.Barcode;
 import com.spoonsea.qualitytracing.lims.model.BarcodeBroth;
 import com.spoonsea.qualitytracing.lims.model.Broth;
@@ -97,7 +93,12 @@ public class LimsServiceImpl implements LimsService {
     		if (rec == null) {
     			return Arrays.asList();
     		}
-		return sakeRepo.findByHid(rec.getHid());
+    		if (rec.getSid() != null) {
+    			return sakeRepo.findByHid(rec.getHid());
+    		} else {
+    			List<Barcode> barcodes = barcodeRepo.findBySidLike(rec.getHid());
+    			return sakeRepo.findByHidIn(barcodes.stream().map(b -> b.getHid()).collect(Collectors.toSet()));
+    		}
     }
 
     @Override
@@ -106,7 +107,7 @@ public class LimsServiceImpl implements LimsService {
         if (barcode == null) {
             return Arrays.asList();
         }
-        List<Broth> sakeList = brothRepo.findByHidLike(barcode.getSid());
+        List<Broth> sakeList = brothRepo.findByLikeHid(barcode.getSid());
         return sakeList;
     }
 
@@ -126,7 +127,7 @@ public class LimsServiceImpl implements LimsService {
     		if (barcode == null) {
             return Arrays.asList();
         }
-    		List<ArLottab> arLottabList = arLottabRepo.findBySidLike(barcode.getSid());
+    		List<ArLottab> arLottabList = arLottabRepo.findByLikeSid(barcode.getSid());
     		arLottabList.addAll(arLottabRepo.findByHid(barcode.getHid()));
     		return arLottabList;
     }
@@ -140,19 +141,21 @@ public class LimsServiceImpl implements LimsService {
     		List<ArLottab> arLottabList = new ArrayList<ArLottab>();
     		if (rec.getSid() != null) {
     			arLottabList.addAll(arLottabRepo.findByHid(rec.getHid()));
-    			arLottabList.addAll(arLottabRepo.findBySidLike(rec.getSid()));
+    			arLottabList.addAll(arLottabRepo.findByLikeSid(rec.getSid()));
     		} else {
-    			arLottabList.addAll(arLottabRepo.findBySidLike(rec.getHid()));
+    			arLottabList.addAll(arLottabRepo.findBySid(rec.getHid()));
     		}
     		return arLottabList;
     }
-    
-//    @Override
-//    public List<AuxiliaryMaterial> getAuxiliaryMaterialList(CodeInfo code) {
-//    		List<ArLottab> arLottabList = getArLottabList(code);
-//    		for (ArLottab ar: arLottabList) {
-//    			
-//    		}
-//    }
+
+	@Override
+	public Barcode getPackaging(String barcode) {
+		return barcodeRepo.findOneByBarcode(barcode);
+//		if (rec.getSid() != null) {
+//			return barcodeRepo.findOneByHidOrderByDateAndTimeAsc(rec.getHid());
+//		} else {
+//			return barcodeRepo.findOneBySidLikeOrderByDateAndTimeAsc(rec.getHid());
+//		}
+	}
 
 }

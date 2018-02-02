@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,22 +21,7 @@ public abstract class BaseBraumatReportService implements ReportService<Map<Stri
     
 	private static final Logger logger = LoggerFactory.getLogger(BaseBraumatReportService.class);
 
-    public static DateTime getDateTime(String date, String time) {
-    		String[] datePart = date.trim().split("-");
-    		String[] timePart = time.trim().split(":");
-    		int year = Integer.parseInt(datePart[0]);
-    		int month = Integer.parseInt(datePart[1]);
-    		int day = Integer.parseInt(datePart[2]);
-    		int hour = Integer.parseInt(timePart[0]);
-    		int minute = timePart.length > 1 ? Integer.parseInt(timePart[1]) : 0;
-    		int second = timePart.length > 2 ? Integer.parseInt(timePart[2]) : 0;
-    		logger.info("local date time: {}-{}-{} {}:{}:{}", year, month, day, hour, minute, second);
-    		DateTime dt = new DateTime(year, month, day, hour, minute, second).withZone(DateTimeZone.UTC);
-    		logger.info("local date time in UTC: {}", dt.toString());
-        return dt;
-    }
-
-    public String getReportId() {
+	public String getReportId() {
         return this.getClass().getAnnotation(ReportServiceAnnotation.class).id();
     }
 
@@ -68,20 +51,24 @@ public abstract class BaseBraumatReportService implements ReportService<Map<Stri
                     String dim = (String) field.get(rec);
                     field = Brau33.class.getDeclaredField("nameDfm" + i);
                     field.setAccessible(true);
-                    result.put("param" + i, (String) field.get(rec));
+                    String paramName = (String) field.get(rec);
+                    //result.put("param" + i, (String) field.get(rec));
                     field = Brau33.class.getDeclaredField("swDfm" + i);
                     field.setAccessible(true);
-                    result.put("paramset" + i, (String) field.get(rec) + dim);
+                    String paramSet = (String) field.get(rec);
+                    //result.put("paramset" + i, (String) field.get(rec) + dim);
                     field = Brau33.class.getDeclaredField("iwDfm" + i);
                     field.setAccessible(true);
-                    result.put("paramval" + i, (String) field.get(rec) + dim);
-                    if (columnId.size() < 5 + i * 3) {
+                    String paramVal = (String) field.get(rec);
+                    result.put("param" + i, String.format("%s(%s)\n%s\n%s", paramName, dim, paramSet, paramVal));
+                    //result.put("paramval" + i, (String) field.get(rec) + dim);
+                    if (columnId.size() < 5 + i) {
                         columnId.add("param" + i);
-                        columnId.add("paramset" + i);
-                        columnId.add("paramval" + i);
-                        columnName.add("参数" + i);
-                        columnName.add("参数" + i + "设定值");
-                        columnName.add("参数" + i + "实际值");
+                        //columnId.add("paramset" + i);
+                        //columnId.add("paramval" + i);
+                        columnName.add(String.format("参数%d\n设定值\n实际值", i));
+                        //columnName.add("参数" + i + "设定值");
+                        //columnName.add("参数" + i + "实际值");
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

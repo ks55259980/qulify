@@ -10,6 +10,6 @@ import com.spoonsea.qualitytracing.lims.model.Broth;
 public interface BrothRepository extends JpaRepository<Broth, String> {
 
     @Query(value = "select * from dbo.Broth where ?1 like '%' + HID + '%'", nativeQuery=true)
-    List<Broth> findByHidLike(String sid);
+    List<Broth> findByLikeHid(String sid);
 
 }

@@ -21,6 +21,7 @@ import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
 import com.spoonsea.qualitytracing.lims.model.BarcodeBroth;
 import com.spoonsea.qualitytracing.service.LimsService;
+import com.spoonsea.qualitytracing.util.MiscUtil;
 
 
 @Service
@@ -42,7 +43,7 @@ public class BraumatUTReportService extends BaseBraumatReportService {
     		logger.info("barcode broth found: {}", brothList.size());
     		String rezTyp = "UT";
     		for (BarcodeBroth broth: brothList) {
-            DateTime dt = getDateTime(broth.getDate(), broth.getTime());
+            DateTime dt = MiscUtil.getDateTime(broth.getDate(), broth.getTime());
             String teilanl = rezTyp + broth.getFermenter();
             logger.info("teilanl: {}, dt: {}", teilanl, dt);
             Brau33 record = braumatRepo.findOneByRezTypAndTeilanlAndStartTsLessThanEqualAndEndTsGreaterThanEqual(

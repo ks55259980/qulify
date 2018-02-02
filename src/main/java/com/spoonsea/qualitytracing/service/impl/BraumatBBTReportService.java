@@ -21,6 +21,7 @@ import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
 import com.spoonsea.qualitytracing.lims.model.Sake;
 import com.spoonsea.qualitytracing.service.LimsService;
+import com.spoonsea.qualitytracing.util.MiscUtil;
 
 @Service
 @ReportServiceAnnotation(name = "酿造清酒报表", id = "BraumatBBTReport", category = Category.Brewing)
@@ -37,7 +38,7 @@ public class BraumatBBTReportService extends BaseBraumatReportService {
 	private ReportTemplate<Map<String, String>> getReport(List<Sake> sakeList) {
 		Set<Brau33> result = new HashSet<Brau33>();
 		for (Sake sake : sakeList) {
-			DateTime dt = getDateTime(sake.getDate(), sake.getFullTankTime());
+			DateTime dt = MiscUtil.getDateTime(sake.getDate(), sake.getFullTankTime());
 			String rezTyp = "BBT";
 			int bbtNo = 0;
 			try {

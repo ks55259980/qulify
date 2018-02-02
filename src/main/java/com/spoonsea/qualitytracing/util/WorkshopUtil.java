@@ -29,4 +29,11 @@ public class WorkshopUtil {
         return lineMap.get(code);
     }
 
+    public static String getBarcodeWorkshopCode(String code) {
+    		return "CN01";	// PUT
+    }
+    
+    public static String getBarcodeLineCode(String code) {
+    		return "70100001";	// BL01
+    }
 }

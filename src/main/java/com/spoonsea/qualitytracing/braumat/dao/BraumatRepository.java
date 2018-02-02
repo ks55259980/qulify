@@ -44,4 +44,9 @@ public interface BraumatRepository extends JpaRepository<Brau33, BraumatKey> {
 
 	List<Brau33> findByRezTypAndTeilanlAndAuftrNrAndChargNr(String rezTyp, String teilanl, int auftrNr, int chargNr);
 
+	Brau33 findOneByRezTypAndTeilanlAndAuftrNrAndChargNrAndGopName(String rezTyp, String teilanl, int auftrNr,
+			int chargNr, String gopName);
+
+	Brau33 findOneByRezTypAndSwDfm1AndStartTs(String string, String teilanl, BigInteger startTs);
+
 }

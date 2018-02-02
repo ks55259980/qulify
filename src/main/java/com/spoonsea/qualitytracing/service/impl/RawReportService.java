@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.MapReport;
 import com.spoonsea.qualitytracing.lims.model.ArLottab;
@@ -17,6 +19,7 @@ public abstract class RawReportService<T> extends BaseLimsReportService<T> {
 
 	private static final Logger logger = LoggerFactory.getLogger(RawReportService.class);
 
+	@Autowired
 	private LimsService limsService;
 
 	abstract public List<T> getRecordsFromId(Set<String> idSet);
