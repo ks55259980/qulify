@@ -40,8 +40,7 @@ public class BraumatFilterReportService extends BaseBraumatReportService {
 
     @Override
     public ReportTemplate<Map<String, String>> getReport(String barcode) {
-        List<Barcode> barcodeList = barcodeRepo.findByBarcode(barcode);
-        logger.info("found barcode: {}", barcodeList.size());
+        Barcode record = barcodeRepo.findOneByBarcode(barcode);
         Set<Brau33> recordSet = new HashSet<Brau33>();
         return generateReport(recordSet.stream().collect(Collectors.toList()));
     }

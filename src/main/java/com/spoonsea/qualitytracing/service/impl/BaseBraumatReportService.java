@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.spoonsea.qualitytracing.braumat.entity.Brau33;
+import com.spoonsea.qualitytracing.braumat.entity.Braumat;
 import com.spoonsea.qualitytracing.configuration.ReportServiceAnnotation;
 import com.spoonsea.qualitytracing.dto.MapReport;
 import com.spoonsea.qualitytracing.service.ReportService;
@@ -29,14 +30,14 @@ public abstract class BaseBraumatReportService implements ReportService<Map<Stri
 		return this.getClass().getAnnotation(ReportServiceAnnotation.class).name();
 	}
 
-	public MapReport generateReport(List<Brau33> records) {
+	public <T extends Braumat> MapReport generateReport(List<T> records) {
         List<String> columnId = new ArrayList<String>();
         List<String> columnName = new ArrayList<String>();
 
         columnId.addAll(Arrays.asList("startTs","endTs","teilanl", "gopName", "paramCount"));
         columnName.addAll(Arrays.asList("开始时间","结束时间","工艺单元名称","工艺步骤名称", "参数个数"));
         List<Map<String, String>> ret = new ArrayList<Map<String, String>>();
-        for (Brau33 rec: records) {
+        for (Braumat rec: records) {
             Map<String,String> result = new HashMap<String, String>();
             result.put("id", rec.getStartTs().toString() + rec.getEndTs().toString());
             result.put("startTs", new Date(rec.getStartTs().longValue() * 1000).toLocaleString());

@@ -45,14 +45,13 @@ public class LimsServiceImpl implements LimsService {
     private ArLottabRepository arLottabRepo;
 
     private Barcode getBarcode(CodeInfo code) {
-        List<Barcode> barcodeList = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByTimeDesc(
+        Barcode barcode = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByTimeDesc(
                 code.getLine(), code.getDate(), code.getTime());
-        if (barcodeList.isEmpty()) {
+        if (barcode == null) {
             logger.warn("barcode not found for: line={}, date={}, time={}", code.getLine(), code.getDate(),
                     code.getTime());
             return null;
         }
-        Barcode barcode = barcodeList.get(0);
         logger.info("barcode: hid={}, workshop={}", barcode.getHid(), barcode.getPackagingLine());
         return barcode;
     }

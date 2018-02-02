@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.spoonsea.qualitytracing.braumat.dao.BraumatRepository;
+import com.spoonsea.qualitytracing.braumat.dao.Brau33Repository;
 import com.spoonsea.qualitytracing.braumat.entity.Brau33;
 import com.spoonsea.qualitytracing.configuration.ReportServiceAnnotation;
 import com.spoonsea.qualitytracing.constant.Constants.Category;
@@ -33,7 +33,7 @@ public class BraumatBBTReportService extends BaseBraumatReportService {
 	private LimsService limsService;
 
 	@Autowired
-	private BraumatRepository braumatRepo;
+	private Brau33Repository braumatRepo;
 
 	private ReportTemplate<Map<String, String>> getReport(List<Sake> sakeList) {
 		Set<Brau33> result = new HashSet<Brau33>();

@@ -5,13 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the brau33 database table.
+ * The persistent class for the brau31 database table.
  * 
  */
 @Entity
 @IdClass(BraumatKey.class)
-@Table(name="brau33")
-@NamedQuery(name="Brau33.findAll", query="SELECT b FROM Brau33 b")
-public class Brau33 extends Braumat implements Serializable {
+@Table(name="brau31")
+@NamedQuery(name="Brau31.findAll", query="SELECT b FROM Brau31 b")
+public class Brau31 extends Braumat implements Serializable {
 	private static final long serialVersionUID = 1L;
 }
