@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import com.spoonsea.qualitytracing.braumat.dao.Brau31Repository;
 import com.spoonsea.qualitytracing.braumat.dao.Brau33Repository;
-import com.spoonsea.qualitytracing.braumat.dao.BraumatRepository;
 import com.spoonsea.qualitytracing.braumat.entity.Brau31;
 import com.spoonsea.qualitytracing.braumat.entity.Brau33;
 import com.spoonsea.qualitytracing.configuration.ReportServiceAnnotation;
@@ -27,7 +26,6 @@ import com.spoonsea.qualitytracing.dto.MapReport;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
 import com.spoonsea.qualitytracing.lims.dao.BarcodeRepository;
 import com.spoonsea.qualitytracing.lims.model.Barcode;
-import com.spoonsea.qualitytracing.lims.model.BarcodeBroth;
 import com.spoonsea.qualitytracing.util.MiscUtil;
 
 @Service

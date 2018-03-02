@@ -28,6 +28,8 @@ public interface BarcodeRepository extends JpaRepository<Barcode, Integer> {
 	@Query(value="select * from dbo.barcode where English=?1 and ?2 like '%' + HID + '%'", nativeQuery=true)
 	List<Barcode> findByEnglishAndLikeHid(String English, String sid);
 
+	Barcode findOneByHidAndEnglish(String hid, String string);
+
 //	Barcode findOneBySidLikeOrderByDateAndTimeAsc(String sid);
 //
 //	Barcode findOneByHidOrderByDateAndTimeAsc(String hid);
