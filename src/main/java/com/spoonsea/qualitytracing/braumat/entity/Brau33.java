@@ -9,9 +9,8 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@IdClass(BraumatKey.class)
-@Table(name="brau33")
-@NamedQuery(name="Brau33.findAll", query="SELECT b FROM Brau33 b")
+@Table(name = "brau33")
+@NamedQuery(name = "Brau33.findAll", query = "SELECT b FROM Brau33 b")
 public class Brau33 extends Braumat implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 }

@@ -9,6 +9,8 @@ import java.math.BigInteger;
  * The persistent class for the brau33 database table.
  * 
  */
+@MappedSuperclass
+@IdClass(BraumatKey.class)
 public class Braumat implements Serializable {
 	private static final long serialVersionUID = 1L;
 

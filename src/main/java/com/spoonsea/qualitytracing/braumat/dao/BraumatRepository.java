@@ -4,11 +4,13 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
 import com.spoonsea.qualitytracing.braumat.entity.Braumat;
 import com.spoonsea.qualitytracing.braumat.entity.BraumatKey;
 
 
+@NoRepositoryBean
 public interface BraumatRepository<T extends Braumat> extends JpaRepository<T, BraumatKey> {
     
     T findOneByRezTypAndTeilanlNrAndStartTsLessThanEqualAndEndTsGreaterThan(String rezTyp, int teilanlNr, BigInteger startTs, BigInteger endTs);
