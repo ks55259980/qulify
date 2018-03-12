@@ -17,28 +17,27 @@ import com.spoonsea.qualitytracing.configuration.ReportServiceAnnotation;
 import com.spoonsea.qualitytracing.dto.MapReport;
 import com.spoonsea.qualitytracing.service.ReportService;
 
-
 public abstract class BaseBraumatReportService implements ReportService<Map<String, String>> {
-    
-	private static final Logger logger = LoggerFactory.getLogger(BaseBraumatReportService.class);
 
-	public String getReportId() {
+    private static final Logger logger = LoggerFactory.getLogger(BaseBraumatReportService.class);
+
+    public String getReportId() {
         return this.getClass().getAnnotation(ReportServiceAnnotation.class).id();
     }
 
     public String getReportName() {
-		return this.getClass().getAnnotation(ReportServiceAnnotation.class).name();
-	}
+        return this.getClass().getAnnotation(ReportServiceAnnotation.class).name();
+    }
 
-	public <T extends Braumat> MapReport generateReport(List<T> records) {
+    public <T extends Braumat> MapReport generateReport(List<T> records) {
         List<String> columnId = new ArrayList<String>();
         List<String> columnName = new ArrayList<String>();
 
-        columnId.addAll(Arrays.asList("startTs","endTs","teilanl", "gopName", "paramCount"));
-        columnName.addAll(Arrays.asList("开始时间","结束时间","工艺单元名称","工艺步骤名称", "参数个数"));
+        columnId.addAll(Arrays.asList("startTs", "endTs", "teilanl", "gopName", "paramCount"));
+        columnName.addAll(Arrays.asList("开始时间", "结束时间", "工艺单元名称", "工艺步骤名称", "参数个数"));
         List<Map<String, String>> ret = new ArrayList<Map<String, String>>();
-        for (Braumat rec: records) {
-            Map<String,String> result = new HashMap<String, String>();
+        for (Braumat rec : records) {
+            Map<String, String> result = new HashMap<String, String>();
             result.put("id", rec.getStartTs().toString() + rec.getEndTs().toString());
             result.put("startTs", new Date(rec.getStartTs().longValue() * 1000).toLocaleString());
             result.put("endTs", new Date(rec.getEndTs().longValue() * 1000).toLocaleString());
@@ -47,29 +46,29 @@ public abstract class BaseBraumatReportService implements ReportService<Map<Stri
             result.put("paramCount", Integer.toString(rec.getDfmAnz()));
             for (int i = 1; i <= rec.getDfmAnz(); i++) {
                 try {
-                		Field field = Brau33.class.getDeclaredField("dimDfm" + i);
-                		field.setAccessible(true);
+                    Field field = Braumat.class.getDeclaredField("dimDfm" + i);
+                    field.setAccessible(true);
                     String dim = (String) field.get(rec);
-                    field = Brau33.class.getDeclaredField("nameDfm" + i);
+                    field = Braumat.class.getDeclaredField("nameDfm" + i);
                     field.setAccessible(true);
                     String paramName = (String) field.get(rec);
-                    //result.put("param" + i, (String) field.get(rec));
-                    field = Brau33.class.getDeclaredField("swDfm" + i);
+                    // result.put("param" + i, (String) field.get(rec));
+                    field = Braumat.class.getDeclaredField("swDfm" + i);
                     field.setAccessible(true);
                     String paramSet = (String) field.get(rec);
-                    //result.put("paramset" + i, (String) field.get(rec) + dim);
-                    field = Brau33.class.getDeclaredField("iwDfm" + i);
+                    // result.put("paramset" + i, (String) field.get(rec) + dim);
+                    field = Braumat.class.getDeclaredField("iwDfm" + i);
                     field.setAccessible(true);
                     String paramVal = (String) field.get(rec);
                     result.put("param" + i, String.format("%s(%s)\n%s\n%s", paramName, dim, paramSet, paramVal));
-                    //result.put("paramval" + i, (String) field.get(rec) + dim);
+                    // result.put("paramval" + i, (String) field.get(rec) + dim);
                     if (columnId.size() < 5 + i) {
                         columnId.add("param" + i);
-                        //columnId.add("paramset" + i);
-                        //columnId.add("paramval" + i);
+                        // columnId.add("paramset" + i);
+                        // columnId.add("paramval" + i);
                         columnName.add(String.format("参数%d\n设定值\n实际值", i));
-                        //columnName.add("参数" + i + "设定值");
-                        //columnName.add("参数" + i + "实际值");
+                        // columnName.add("参数" + i + "设定值");
+                        // columnName.add("参数" + i + "实际值");
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -80,10 +79,10 @@ public abstract class BaseBraumatReportService implements ReportService<Map<Stri
         }
 
         ret.sort((o1, o2) -> {
-			Map<String, String> s1 = (Map<String, String>)o1;
-			Map<String, String> s2 = (Map<String, String>)o2;
-			return s1.get("id").compareTo(s2.get("id"));
-		});
+            Map<String, String> s1 = (Map<String, String>) o1;
+            Map<String, String> s2 = (Map<String, String>) o2;
+            return s1.get("id").compareTo(s2.get("id"));
+        });
 
         MapReport report = new MapReport();
         report.setColumnId(columnId);
