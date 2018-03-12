@@ -29,22 +29,24 @@ public class ReportController {
 
     @Autowired
     @Qualifier("ReportServices")
-    private Map<String, ReportService> reportServices;
+    private Map<String, ReportService<?>> reportServices;
 
     @RequestMapping("/{reportId}")
     public ResponseEntity<?> searchReport(@PathVariable String reportId,
             @RequestParam(required = false) String barcode,
             @RequestParam(required = false) String batchCode) {
-        ReportService service = reportServices.get(reportId);
+        ReportService<?> service = reportServices.get(reportId);
         if (service != null) {
             if (barcode != null) {
                 logger.info("use barcode '{}' to search ...", barcode);
                 return ResponseUtil.makeResponse(service.getReport(barcode));
-            } else {
+            } else if (batchCode != null) {
                 logger.info("use batch code '{}' to search ...", batchCode);
                 CodeInfo codeInfo = new CodeInfo(batchCode);
                 logger.info("date: {}, time: {}, line: {}", codeInfo.getDate(), codeInfo.getTime(), codeInfo.getLine());
                 return ResponseUtil.makeResponse(service.getReport(codeInfo));
+            } else {
+                return ResponseUtil.makeErrorResponse(-101, "lack of parameter");
             }
         }
         return ResponseUtil.makeErrorResponse(-100, "unknown reportId: " + reportId);

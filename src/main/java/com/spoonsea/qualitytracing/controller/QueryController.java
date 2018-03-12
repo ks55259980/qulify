@@ -40,9 +40,7 @@ public class QueryController {
         try {
             Date startDate = new Date(startTime);
             Date endDate = new Date(endTime);
-            BarcodeQueryResult result = barcodeQueryService.queryByTimeInterval(factoryCode, lineCode, startDate,
-                    endDate);
-            return result;
+            return barcodeQueryService.queryByTimeInterval(factoryCode, lineCode, startDate, endDate);
         } catch (Exception ex) {
             logger.warn("query by interval failed: {}", ex.getMessage());
             ex.printStackTrace();
