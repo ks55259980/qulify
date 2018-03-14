@@ -28,5 +28,7 @@ public interface LimsService {
 	List<ArLottab> getArLottabList(String barcode);
 
 	Barcode getPackaging(String barcode);
+	
+	Barcode getBarcode(CodeInfo code);
 
 }

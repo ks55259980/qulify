@@ -60,7 +60,7 @@ public class TpoReportService implements ReportService<TpoRecord> {
 	@Override
 	public ReportTemplate<TpoRecord> getReport(CodeInfo code) {
 		List<TpoRecord> result = new ArrayList<TpoRecord>();
-		Barcode barcode = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByTimeDesc(code.getLine(),
+		Barcode barcode = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByDateDescTimeDesc(code.getLine(),
 				code.getDate(), code.getTime());
 		if (barcode != null) {
 			logger.info("barcode: hid={}, workshop={}", barcode.getHid(), barcode.getPackagingLine());

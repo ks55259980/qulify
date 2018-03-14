@@ -12,6 +12,7 @@ public class MiscUtil {
     private final static Logger logger = LoggerFactory.getLogger(MiscUtil.class);
 
     public static DateTime getDateTime(String date, String time) {
+        logger.info("original datetime, date: {}, time: {}", date, time);
         String[] datePart = date.trim().split("-");
         String[] timePart = time.trim().split(":");
         int year = Integer.parseInt(datePart[0]);

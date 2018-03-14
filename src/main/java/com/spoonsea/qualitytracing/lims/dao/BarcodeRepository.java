@@ -9,29 +9,31 @@ import com.spoonsea.qualitytracing.lims.model.Barcode;
 
 public interface BarcodeRepository extends JpaRepository<Barcode, Integer> {
 
-    @Query(value="select top(1) * from dbo.barcode where PackagingLine=?1 and date=?2 and time<?3 order by time desc", nativeQuery=true)
-    Barcode findTop1ByPackagingLineAndDateAndTimeLessThanOrderByTimeDesc(String packagingline, String date, String time);
+    Barcode findTop1ByPackagingLineAndDateAndTimeLessThanOrderByDateDescTimeDesc(String packagingLine,
+            String date, String time);
 
-	Barcode findOneByBarcode(String barcode);
+    Barcode findOneByBarcode(String barcode);
 
-	List<Barcode> findByHid(String hid);
+    List<Barcode> findByHid(String hid);
 
-	List<Barcode> findBySidLike(String sid);
+    List<Barcode> findBySidLike(String sid);
 
-	List<Barcode> findByHidAndEnglish(String hid, String english);
-	
-	List<Barcode> findBySidLikeAndEnglish(String sid, String english);
-	
-	@Query(value="select * from dbo.barcode where ?1 like '%' + HID + '%'", nativeQuery=true)
-	List<Barcode> findByLikeHid(String sid);
+    List<Barcode> findByHidAndEnglish(String hid, String english);
 
-	@Query(value="select * from dbo.barcode where English=?1 and ?2 like '%' + HID + '%'", nativeQuery=true)
-	List<Barcode> findByEnglishAndLikeHid(String English, String sid);
+    List<Barcode> findBySidLikeAndEnglish(String sid, String english);
 
-	Barcode findOneByHidAndEnglish(String hid, String string);
+    @Query(value = "select * from dbo.barcode where ?1 like '%' + HID + '%'", nativeQuery = true)
+    List<Barcode> findByLikeHid(String sid);
 
-//	Barcode findOneBySidLikeOrderByDateAndTimeAsc(String sid);
-//
-//	Barcode findOneByHidOrderByDateAndTimeAsc(String hid);
+    @Query(value = "select * from dbo.barcode where English=?1 and ?2 like '%' + HID + '%'", nativeQuery = true)
+    List<Barcode> findByEnglishAndLikeHid(String english, String sid);
+
+    Barcode findOneByHidAndEnglish(String hid, String string);
+
+    Barcode findTop1ByHidAndEnglishOrderByDateAscTimeAsc(String hid, String english);
+
+    // Barcode findOneBySidLikeOrderByDateAndTimeAsc(String sid);
+    //
+    // Barcode findOneByHidOrderByDateAndTimeAsc(String hid);
 
 }

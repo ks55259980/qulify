@@ -56,7 +56,7 @@ public class CapacityReportService implements ReportService<CapacityRecord> {
 	@Override
 	public ReportTemplate<CapacityRecord> getReport(CodeInfo code) {
 		List<CapacityRecord> result = new ArrayList<CapacityRecord>();
-		Barcode barcode = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByTimeDesc(code.getLine(),
+		Barcode barcode = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByDateDescTimeDesc(code.getLine(),
 				code.getDate(), code.getTime());
 		if (barcode != null) {
 			logger.info("barcode: hid={}, workshop={}", barcode.getHid(), barcode.getPackagingLine());
