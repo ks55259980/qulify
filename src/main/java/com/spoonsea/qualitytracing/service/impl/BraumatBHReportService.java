@@ -2,6 +2,8 @@ package com.spoonsea.qualitytracing.service.impl;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,75 +31,87 @@ import com.spoonsea.qualitytracing.lims.model.Barcode;
 import com.spoonsea.qualitytracing.util.MiscUtil;
 
 @Service
-@ReportServiceAnnotation(name = BraumatBHReportService.reportName, id = "BraumatBHReport", category = Category.Brewing, enabled = false)
+@ReportServiceAnnotation(name = BraumatBHReportService.reportName, id = "BraumatBHReport", category = Category.Brewing, enabled = true)
 public class BraumatBHReportService extends BaseBraumatReportService {
 
-	protected static final String reportName = "酿造糖化报表";
+    protected static final String reportName = "酿造糖化报表";
 
-	private static final Logger logger = LoggerFactory.getLogger(BraumatBHReportService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BraumatBHReportService.class);
 
-	@Autowired
-	private BarcodeRepository barcodeRepo;
+    @Autowired
+    private BarcodeRepository barcodeRepo;
 
-	@Autowired
-	private Brau33Repository brau33Repo;
+    @Autowired
+    private Brau33Repository brau33Repo;
 
-	@Autowired
-	private Brau31Repository brau31Repo;
+    @Autowired
+    private Brau31Repository brau31Repo;
 
-	public MapReport getReport(List<Barcode> wortList) {
-		Set<Brau31> result = new HashSet<Brau31>();
-		String rezTyp = "UT";
-		Map<String, Integer> count = new HashMap<String, Integer>();
-		List<Barcode> usefulWorts = new ArrayList<Barcode>();
-		for (Barcode barcode : wortList) {
-			String sid = barcode.getHid();
-			if (count.containsKey(sid)) {
-				count.put(sid, count.get(sid) + 1);
-			} else {
-				count.put(sid, 1);
-				usefulWorts.add(barcode);
-			}
-		}
-		for (Barcode barcode : usefulWorts) {
-			DateTime dt = MiscUtil.getDateTime(barcode.getDate(), barcode.getTime());
-			String teilanl = rezTyp + barcode.getFermenter();
-			logger.info("teilanl: {}, dt: {}", teilanl, dt);
-			Brau33 record = brau33Repo.findOneByRezTypAndTeilanlAndStartTsLessThanEqualAndEndTsGreaterThanEqual(rezTyp,
-					teilanl, BigInteger.valueOf(dt.getMillis() / 1000), BigInteger.valueOf(dt.getMillis() / 1000));
-			if (record != null) {
-				Brau33 filling = brau33Repo.findOneByRezTypAndTeilanlAndAuftrNrAndChargNrAndGopName(rezTyp, teilanl,
-						record.getAuftrNr(), record.getChargNr(), "Filling");
-				Brau33 fillingUT = brau33Repo.findOneByRezTypAndSwDfm1AndStartTs("1.FillingUT", teilanl,
-						filling.getStartTs());
-				// add BH search
-				for (int i = 0; i < count.get(barcode.getHid()); i++) {
-					result.addAll(brau31Repo.findByTeilanlAndAuftrNrAndChargNr("Rice Cook", fillingUT.getAuftrNr(),
-							fillingUT.getChargNr() + i));
-				}
-			}
-		}
-		return generateReport(result.stream().collect(Collectors.toList()));
-	}
+    public MapReport getReport(List<Barcode> wortList) {
+        Set<Brau31> result = new HashSet<Brau31>();
+        String rezTyp = "UT";
+        Map<String, Integer> count = new HashMap<String, Integer>();
+        List<Barcode> usefulWorts = new ArrayList<Barcode>();
+        for (Barcode barcode : wortList) {
+            String sid = barcode.getHid();
+            if (count.containsKey(sid)) {
+                count.put(sid, count.get(sid) + 1);
+            } else {
+                count.put(sid, 1);
+                usefulWorts.add(barcode);
+            }
+        }
+        for (Barcode barcode : usefulWorts) {
+            DateTime dt = MiscUtil.getDateTime(barcode.getDate(), barcode.getTime());
+            String teilanl = rezTyp + barcode.getFermenter();
+            logger.info("teilanl: {}, dt: {}", teilanl, dt);
+            Brau33 ut_Filling = brau33Repo.findTop1ByRezTypAndTeilanlAndGopNameAndStartTsGreaterThanOrderByStartTsAsc(
+                    rezTyp, teilanl, "Filling", BigInteger.valueOf(dt.getMillis() / 1000));
+            if (ut_Filling != null) {
+                Brau33 fillingUT = brau33Repo
+                        .findTop1ByRezTypAndSwDfm1AndStartTsGreaterThanEqualAndEndTsLessThanOrderByStartTsAsc(
+                                "1.FillingUT", teilanl, ut_Filling.getStartTs(), ut_Filling.getEndTs());
+                // add BH search
+                List<Integer> chargNrList = new ArrayList<>();
+                for (int i = 0; i < count.get(barcode.getHid()); i++) {
+                    chargNrList.add(fillingUT.getChargNr() + i);
+                }
+                result.addAll(brau31Repo.findByAuftrNrAndChargNrInAndTeilanlIn(fillingUT.getAuftrNr(), chargNrList,
+                        Arrays.asList("Rice Cooker1", "Rice Cooker2")));
+            }
+        }
+        return generateReport(result.stream().collect(Collectors.toList()));
+    }
 
-	@Override
-	public ReportTemplate<Map<String, String>> getReport(CodeInfo code) {
-		Barcode barcode = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByTimeDesc(code.getLine(),
-				code.getDate(), code.getTime());
-		List<Barcode> wortList = barcodeRepo.findByEnglishAndLikeHid("Wort", barcode.getSid());
-		return getReport(wortList);
-	}
+    @Override
+    public ReportTemplate<Map<String, String>> getReport(CodeInfo code) {
+        Barcode barcode = barcodeRepo.findTop1ByPackagingLineAndDateAndTimeLessThanOrderByDateDescTimeDesc(
+                code.getLine(), code.getDate(), code.getTime());
+        if (barcode == null) {
+            return generateReport(Collections.emptyList());
+        }
+        List<Barcode> wortList = null;
+        if (barcode.getSid() != null) {
+            wortList = barcodeRepo.findByEnglishAndLikeHid("Wort", barcode.getSid());
+        } else {
+            wortList = barcodeRepo.findByHid(barcode.getHid());
+        }
+        return getReport(wortList);
+    }
 
-	@Override
-	public ReportTemplate<Map<String, String>> getReport(String barcode) {
-		Barcode record = barcodeRepo.findOneByBarcode(barcode);
-		List<Barcode> wortList = null;
-		if (record.getSid() != null) {
-			wortList = barcodeRepo.findByEnglishAndLikeHid("Wort", record.getSid());
-		} else {
-			wortList = barcodeRepo.findByHid(record.getHid());
-		}
-		return getReport(wortList);
-	}
+    @Override
+    public ReportTemplate<Map<String, String>> getReport(String barcode) {
+        Barcode record = barcodeRepo.findOneByBarcode(barcode);
+        if (record == null) {
+            return generateReport(Collections.emptyList());
+        }
+        List<Barcode> wortList = null;
+        if (record.getSid() != null) {
+            wortList = barcodeRepo.findByEnglishAndLikeHid("Wort", record.getSid());
+        } else {
+            wortList = barcodeRepo.findByHid(record.getHid());
+        }
+        return getReport(wortList);
+    }
 
 }
