@@ -49,8 +49,9 @@ public class BraumatBBTReportService extends BaseBraumatReportService {
             logger.info("year: {}, month: {}, day: {}, start_hour: {}, end_hour: {}, rezTyp: {}, bbtNo: {}",
                     dt.getYear() % 2000, dt.getMonthOfYear(), dt.getDayOfMonth(), dt.getHourOfDay(), dt.getHourOfDay(),
                     rezTyp, bbtNo);
-            Brau33 labCheck = braumatRepo.findOneByRezTypAndTeilanlNrAndStartTsLessThanEqualAndEndTsGreaterThan(rezTyp,
-                    bbtNo, BigInteger.valueOf(dt.getMillis() / 1000), BigInteger.valueOf(dt.getMillis() / 1000));
+            Brau33 labCheck = braumatRepo
+                    .findTop1ByRezTypAndTeilanlNrAndGopNameAndStartTsGreaterThanEqualOrderByStartTsAsc(rezTyp, bbtNo,
+                            "Lab Check", BigInteger.valueOf(dt.getMillis() / 1000));
             if (labCheck != null) {
                 logger.info("found labCheck: {} - {}", labCheck.getStartTs(), labCheck.getEndTs());
                 Brau33 first = braumatRepo.findTop1ByRezTypAndTeilanlNrAndGopNameAndEndTsLessThanOrderByStartTsDesc(

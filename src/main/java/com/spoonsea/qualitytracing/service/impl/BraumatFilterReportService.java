@@ -40,6 +40,8 @@ public class BraumatFilterReportService extends BaseBraumatReportService {
         if (sake == null || sake.getSid() == null || sake.getHid() == null) {
             return generateReport(Collections.emptyList());
         }
+        logger.info("sake barcode, hid: {}, tank: {}, line: {}, wine: {}", sake.getHid(), sake.getSakeTank(),
+                sake.getPackagingLine(), sake.getWineID());
         // sake.getWineId()'s first character is the number of sake tank //or filter line?
         String number = MiscUtil.getFilterLineNumber(sake);
         Set<Brau33> result = new HashSet<Brau33>();
@@ -52,18 +54,22 @@ public class BraumatFilterReportService extends BaseBraumatReportService {
             } catch (NumberFormatException ex) {
                 logger.warn("bbt number is not integer: {}", sake.getSakeTank());
             }
-            Brau33 sakeOne = brau33Repo.findOneByRezTypAndTeilanlNrAndStartTsLessThanEqualAndEndTsGreaterThan(rezTyp,
-                    bbtNo, BigInteger.valueOf(dt.getMillis() / 1000), BigInteger.valueOf(dt.getMillis() / 1000));
+            Brau33 labCheck = brau33Repo
+                    .findTop1ByRezTypAndTeilanlNrAndGopNameAndStartTsGreaterThanEqualOrderByStartTsAsc(rezTyp, bbtNo,
+                            "Lab Check", BigInteger.valueOf(dt.getMillis() / 1000));
             // when the record's TEILANL='BBT.F2', its auftr_nr and charg_nr
             // will be the same with the record which TEILANL='KGF'
             Brau33 sakeFilling = brau33Repo
                     .findTop1ByRezTypAndTeilanlNrAndGopNameAndAuftrNrAndChargNrAndEndTsLessThanEqualOrderByStartTsDesc(
-                            rezTyp, bbtNo, "Filling", sakeOne.getAuftrNr(), sakeOne.getChargNr(), sakeOne.getStartTs());
+                            rezTyp, bbtNo, "Filling", labCheck.getAuftrNr(), labCheck.getChargNr(),
+                            labCheck.getStartTs());
             Brau33 filterOne = brau33Repo.findTop1ByRezTypAndStartTsGreaterThanEqualAndEndTsLessThanEqualOrderByStartTs(
                     "KGF.B", sakeFilling.getStartTs(), sakeFilling.getEndTs());
-            List<Brau33> filters = brau33Repo.findByRezTypAndTeilanlAndAuftrNrAndChargNr("KGF.B", "KGF",
-                    filterOne.getAuftrNr(), filterOne.getChargNr());
-            result.addAll(filters);
+            if (filterOne != null) {
+                List<Brau33> filters = brau33Repo.findByRezTypAndTeilanlAndAuftrNrAndChargNr("KGF.B", "KGF",
+                        filterOne.getAuftrNr(), filterOne.getChargNr());
+                result.addAll(filters);
+            }
         }
         return generateReport(result.stream().collect(Collectors.toList()));
     }

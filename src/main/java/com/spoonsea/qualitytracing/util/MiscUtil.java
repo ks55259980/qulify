@@ -34,7 +34,7 @@ public class MiscUtil {
                 String char1 = wineID.substring(0, 1);
                 Integer.parseInt(char1); // check NaN
                 return char1;
-            } catch(Exception e){
+            } catch (Exception e) {
                 // no need to concern, due to bad source data
             }
         }

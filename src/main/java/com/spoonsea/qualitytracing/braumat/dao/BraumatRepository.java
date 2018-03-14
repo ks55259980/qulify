@@ -12,8 +12,8 @@ import com.spoonsea.qualitytracing.braumat.entity.BraumatKey;
 @NoRepositoryBean
 public interface BraumatRepository<T extends Braumat> extends JpaRepository<T, BraumatKey> {
 
-    T findOneByRezTypAndTeilanlNrAndStartTsLessThanEqualAndEndTsGreaterThan(String rezTyp, int teilanlNr,
-            BigInteger startTs, BigInteger endTs);
+    T findTop1ByRezTypAndTeilanlNrAndGopNameAndStartTsGreaterThanEqualOrderByStartTsAsc(String rezTyp, int teilanlNr,
+            String gopName, BigInteger startTs);
 
     T findOneByRezTypAndTeilanlNrAndStartTsLessThanEqualAndEndTsGreaterThanEqual(String rezTyp, int teilanlNr,
             BigInteger startTs, BigInteger endTs);
