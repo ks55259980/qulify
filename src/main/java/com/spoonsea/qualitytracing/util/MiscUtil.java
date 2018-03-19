@@ -10,11 +10,14 @@ import com.spoonsea.qualitytracing.lims.model.Barcode;
 public class MiscUtil {
 
     private final static Logger logger = LoggerFactory.getLogger(MiscUtil.class);
+    private static final String ZH = "：";
+    private static final String EN = ":";
 
     public static DateTime getDateTime(String date, String time) {
         logger.info("original datetime, date: {}, time: {}", date, time);
         String[] datePart = date.trim().split("-");
-        String[] timePart = time.trim().split(":");
+        String splitter = time.contains(ZH) ? ZH : EN;
+        String[] timePart = time.trim().split(splitter);
         int year = Integer.parseInt(datePart[0]);
         int month = Integer.parseInt(datePart[1]);
         int day = Integer.parseInt(datePart[2]);

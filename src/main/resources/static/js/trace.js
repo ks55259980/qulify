@@ -112,7 +112,7 @@ $(function () {
             },
             singleAxis: [
                 {
-                    left: '7%',
+                    left: '8%',
                     type: 'category',
                     boundaryGap: false,
                     data: data.from.processes,
@@ -124,7 +124,7 @@ $(function () {
                     }
                 },
                 {
-                    left: '7%',
+                    left: '8%',
                     type: 'category',
                     boundaryGap: false,
                     data: data.to.processes,
@@ -143,23 +143,25 @@ $(function () {
                     data: [data.from.data],
                     direction: 'inverse',
                     top: '10%',
-                    left: '7%',
+                    left: '8%',
                     bottom: '40%',
                     right: '20%',
                     symbolSize: 7,
                     label: {
                         normal: {
-                            position: 'bottom',
-                            horizontalAlign: 'middle',
-                            align: 'middle'
+                            offset: [-75,-5],
+                            position: 'top',
+                            verticalAlign: 'bottom',
+                            align: 'left'
                         }
                     },
                     leaves: {
                         label: {
                             normal: {
-                                position: 'bottom',
-                                horizontalAlign: 'middle',
-                                align: 'middle'
+                                offset: [0,0],
+                                position: 'right',
+                                verticalAlign: 'middle',
+                                align: 'left'
                             }
                         }
                     },
@@ -180,7 +182,7 @@ $(function () {
                     data: [data.to.data],
 
                     top: '80%',
-                    left: '7%',
+                    left: '8%',
                     bottom: '15%',
                     right: '20%',
                     symbolSize: 7,

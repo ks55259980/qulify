@@ -18,7 +18,6 @@ import com.spoonsea.qualitytracing.service.BarcodeQueryService;
 
 import org.tempuri.*;
 
-
 @Service
 public class BarcodeQueryServiceImpl implements BarcodeQueryService {
 

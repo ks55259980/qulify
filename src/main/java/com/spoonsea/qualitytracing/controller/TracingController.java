@@ -19,9 +19,6 @@ public class TracingController {
     private static final Logger logger = LoggerFactory.getLogger(TracingController.class);
 
     @Autowired
-    private BarcodeQueryService barcodeQueryService;
-
-    @Autowired
     private TracingService tracingService;
 
     @RequestMapping("/tracing")
@@ -34,7 +31,7 @@ public class TracingController {
     public String tracingByBoxCode(@RequestParam("boxCode") String boxCode) throws IOException {
         return tracingService.tracingByBoxCode(boxCode);
     }
-    
+
     @RequestMapping("/tracingByCapCode")
     @ResponseBody
     public String tracingByCapCode(@RequestParam("capCode") String capCode) throws IOException {

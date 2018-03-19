@@ -72,12 +72,14 @@ public class BraumatBHReportService extends BaseBraumatReportService {
                         .findTop1ByRezTypAndSwDfm1AndStartTsGreaterThanEqualAndEndTsLessThanOrderByStartTsAsc(
                                 "1.FillingUT", teilanl, ut_Filling.getStartTs(), ut_Filling.getEndTs());
                 // add BH search
-                List<Integer> chargNrList = new ArrayList<>();
-                for (int i = 0; i < count.get(barcode.getHid()); i++) {
-                    chargNrList.add(fillingUT.getChargNr() + i);
+                if (fillingUT != null) {
+                    List<Integer> chargNrList = new ArrayList<>();
+                    for (int i = 0; i < count.get(barcode.getHid()); i++) {
+                        chargNrList.add(fillingUT.getChargNr() + i);
+                    }
+                    result.addAll(brau31Repo.findByAuftrNrAndChargNrInAndTeilanlIn(fillingUT.getAuftrNr(), chargNrList,
+                            Arrays.asList("Rice Cooker1", "Rice Cooker2")));
                 }
-                result.addAll(brau31Repo.findByAuftrNrAndChargNrInAndTeilanlIn(fillingUT.getAuftrNr(), chargNrList,
-                        Arrays.asList("Rice Cooker1", "Rice Cooker2")));
             }
         }
         return generateReport(result.stream().collect(Collectors.toList()));
