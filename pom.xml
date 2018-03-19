@@ -43,6 +43,13 @@
 				<wsdl>WSQATracking.wsdl</wsdl>
 			</properties>
 		</profile>
+        <profile>
+            <id>dev2</id>
+            <properties>
+                <env>dev-local</env>
+                <wsdl>WSQATracking.wsdl</wsdl>
+            </properties>
+        </profile>
 		<profile>
 			<id>test</id>
 			<properties>
