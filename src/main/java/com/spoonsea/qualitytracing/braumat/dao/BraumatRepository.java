@@ -10,7 +10,7 @@ import com.spoonsea.qualitytracing.braumat.entity.Braumat;
 import com.spoonsea.qualitytracing.braumat.entity.BraumatKey;
 
 @NoRepositoryBean
-public interface BraumatRepository<T extends Braumat> extends JpaRepository<T, BraumatKey> {
+public interface BraumatRepository<T extends Braumat> extends JpaRepository<T, Long> {
 
     T findTop1ByRezTypAndTeilanlNrAndGopNameAndStartTsGreaterThanEqualOrderByStartTsAsc(String rezTyp, int teilanlNr,
             String gopName, BigInteger startTs);

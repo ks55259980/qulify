@@ -3,7 +3,7 @@ package com.spoonsea.qualitytracing.braumat.entity;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-
+@Deprecated
 public class BraumatKey implements Serializable {
     /**
      * 
