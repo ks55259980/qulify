@@ -2,10 +2,7 @@ package com.spoonsea.qualitytracing.service.impl;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,11 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spoonsea.qualitytracing.constant.Constants.LogisticsProcess;
+import com.spoonsea.qualitytracing.constant.Constants.ProductionProcess;
 import com.spoonsea.qualitytracing.dto.CodeInfo;
+import com.spoonsea.qualitytracing.dto.DataNode;
 import com.spoonsea.qualitytracing.entity.BarcodeQueryResult;
 import com.spoonsea.qualitytracing.entity.BarcodeQueryResultDetail;
 import com.spoonsea.qualitytracing.lims.dao.BarcodeBrothRepository;
@@ -37,8 +34,6 @@ import com.spoonsea.qualitytracing.service.LimsService;
 import com.spoonsea.qualitytracing.service.TracingService;
 import com.spoonsea.qualitytracing.util.MiscUtil;
 import com.spoonsea.qualitytracing.util.WorkshopUtil;
-
-import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class TracingServiceImpl implements TracingService {
@@ -162,122 +157,5 @@ public class TracingServiceImpl implements TracingService {
         ret.put("processes", LogisticsProcess.getProcessList());
         ret.put("data", packNode);
         return ret;
-    }
-
-    enum ProductionProcess {
-        Package("包装", 0), Sake("清酒", 1), Ferment("发酵", 2), Saccharify("糖化", 3);
-
-        public String name;
-        public int type;
-
-        ProductionProcess(String name, int code) {
-            this.name = name;
-            this.type = code;
-        }
-
-        public static List<String> getProcessList() {
-            List<String> ret = new ArrayList<>();
-            for (ProductionProcess p : ProductionProcess.values()) {
-                ret.add(p.name);
-            }
-            return ret;
-        }
-    }
-
-    enum LogisticsProcess {
-        Package("包装", 0), RollsOff("下线", 1), WarehouseShipment("入库/发运", 2);
-
-        public String name;
-        public int type;
-
-        LogisticsProcess(String name, int code) {
-            this.name = name;
-            this.type = code;
-        }
-
-        public static List<String> getProcessList() {
-            List<String> ret = new ArrayList<>();
-            for (LogisticsProcess p : LogisticsProcess.values()) {
-                ret.add(p.name);
-            }
-            return ret;
-        }
-    }
-
-    @JsonInclude(content = Include.NON_EMPTY)
-    class DataNode implements Serializable {
-        private static final long serialVersionUID = 1L;
-
-        @JsonIgnore
-        private DataNode parent;
-
-        private String name;
-        private String value;
-        private int type;
-
-        private List<DataNode> children;
-
-        public DataNode() {
-        }
-
-        public DataNode(String name, String value, int type) {
-            this.name = name;
-            this.value = value;
-            this.type = type;
-        }
-
-        public void addChildren(DataNode... children) {
-            if (this.children == null) {
-                this.children = new ArrayList<>();
-            }
-            for (DataNode child : children) {
-                if (child != null) {
-                    child.setParent(this);
-                    this.children.add(child);
-                }
-            }
-        }
-
-        public DataNode getParent() {
-            return parent;
-        }
-
-        public void setParent(DataNode parent) {
-            this.parent = parent;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public List<DataNode> getChildren() {
-            return children;
-        }
-
-        public void setChildren(List<DataNode> children) {
-            children.forEach(ch -> ch.setParent(this));
-            this.children = children;
-        }
-
     }
 }
