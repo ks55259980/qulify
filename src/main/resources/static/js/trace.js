@@ -6,46 +6,94 @@ $(function () {
     });
 
     function setModalMaxHeight(element) {
-    	  this.$element     = $(element);  
-    	  this.$content     = this.$element.find('.modal-content');
-    	  var borderWidth   = this.$content.outerHeight() - this.$content.innerHeight();
-    	  var dialogMargin  = $(window).width() < 768 ? 20 : 60;
-    	  var contentHeight = $(window).height() - (dialogMargin + borderWidth);
-    	  var headerHeight  = this.$element.find('.modal-header').outerHeight() || 0;
-    	  var footerHeight  = this.$element.find('.modal-footer').outerHeight() || 0;
-    	  var maxHeight     = contentHeight - (headerHeight + footerHeight);
+        this.$element     = $(element);  
+        this.$content     = this.$element.find('.modal-content');
+        var borderWidth   = this.$content.outerHeight() - this.$content.innerHeight();
+        var dialogMargin  = $(window).width() < 768 ? 20 : 60;
+        var contentHeight = $(window).height() - (dialogMargin + borderWidth);
+        var headerHeight  = this.$element.find('.modal-header').outerHeight() || 0;
+        var footerHeight  = this.$element.find('.modal-footer').outerHeight() || 0;
+        var maxHeight     = contentHeight - (headerHeight + footerHeight);
+        var width         = $(window).width() * 0.9; 
+        
+        this.$content.css({
+            'overflow': 'hidden'
+        });
 
-    	  this.$content.css({
-    	      'overflow': 'hidden'
-    	  });
-    	  
-    	  this.$element
-    	    .find('.modal-body').css({
-    	      'max-height': maxHeight,
-    	      'overflow-y': 'auto'
-    	    });
-    	}
+        this.$element
+        .find('.modal-body').css({
+            'max-height': maxHeight,
+            'overflow-y': 'auto'
+        });
+        
+        this.$element
+        .find('.modal-dialog').css({
+            'width': width
+        });
+    }
 
-    	$('.modal').on('show.bs.modal', function() {
-    	  $(this).show(); 
-    	  setModalMaxHeight(this);
-    	});
+    $('.modal').on('show.bs.modal', function() {
+        $(this).show(); 
+        setModalMaxHeight(this);
+    });
 
-    	$(window).resize(function() {
-    	  if ($('.modal.in').length == 1) {
-    	    setModalMaxHeight($('.modal.in'));
-    	  }
-    	});
+    $(window).resize(function() {
+        if ($('.modal.in').length == 1) {
+            setModalMaxHeight($('.modal.in'));
+        }
+    });
 
     var imgPath = $('input#img-path').val();
+    var lastNode;
+    var lastCode;
     myChart.on('click', function (params) {
-        if (!!params.data.type) {
-            $('#dataModal img').attr('src', imgPath + params.data.type + '.jpg');
+        if (params.seriesName == 'Logistics') {
+            return;
+        }
+        if (lastNode && lastCode && lastNode == params.name && lastCode == $('#cap-code-input').val()) {
+            $('#dataModal').modal('show');
+            return;
+        } else {
+            $('#dataModal .modal-body').empty();
+            lastNode = params.name;
+            lastCode = $('#cap-code-input').val();
+        }
+        if (params.data.type != null && params.data.value != null) {
+            var type = params.data.type;
+            var value = params.data.value;
+            $.get(
+                    "/tracing/report", 
+                    {"type": type, "code": value},
+                    function(response) {
+                        if (response.code == 0 && response.data.length > 0) {
+                            for (var i = 0; i < response.data.length; i++) {
+                                getReportTable(response.data[i], i);
+                            }
+                        }
+                    },
+                    "json"
+            );
             $('#dataModal').modal('show');
         }
     });
 
-    //var webcam = initSourceWebcam();
+    function getReportTable(report, tableIndex){
+        $('#dataModal .modal-body').append($('<h2>' + report.reportName + '</h2>'));
+        $('#dataModal .modal-body').append($('<table id="table' + tableIndex + '"></table>'));
+        var columns = [];
+        for (var i = 0; i < report.columnId.length; i++) {
+            columns.push({
+                "field": report.columnId[i], 
+                "title": report.columnName[i],
+            });
+        }
+        $('#table' + tableIndex).bootstrapTable({
+            columns: columns,
+            data: report.records,
+        });
+    }
+
+    // var webcam = initSourceWebcam();
     let scanner = new Instascan.Scanner({ video: $('#webcam')[0] });
     var scanning = false;
     scanner.addListener('scan', function (content) {
@@ -92,166 +140,166 @@ $(function () {
 
     function showTreeView(data) {
         myChart.setOption(option = {
-            tooltip: {
-                trigger: 'item',
-                triggerOn: 'mousemove'
-            },
-            legend: {
-                top: '2%',
-                left: '3%',
-                orient: 'vertical',
-                data: [{
-                    name: 'Production',
-                    icon: 'rectangle'
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove'
                 },
-                {
-                    name: 'Logistics',
-                    icon: 'rectangle'
-                }],
-                borderColor: '#c23531'
-            },
-            singleAxis: [
-                {
-                    left: '8%',
-                    type: 'category',
-                    boundaryGap: false,
-                    data: data.from.processes,
-                    top: '10%',
-                    bottom: '35%',
-                    right: '20%',
-                    axisLabel: {
-                        interval: 0
-                    }
+                legend: {
+                    top: '2%',
+                    left: '3%',
+                    orient: 'vertical',
+                    data: [{
+                        name: 'Production',
+                        icon: 'rectangle'
+                    },
+                    {
+                        name: 'Logistics',
+                        icon: 'rectangle'
+                    }],
+                    borderColor: '#c23531'
                 },
-                {
-                    left: '8%',
-                    type: 'category',
-                    boundaryGap: false,
-                    data: data.to.processes,
-                    top: '80%',
-                    bottom: '10%',
-                    right: '20%',
-                    axisLabel: {
-                        interval: 0
-                    }
-                }
-            ],
-            series: [
-                {
-                    type: 'tree',
-                    name: 'Production',
-                    data: [data.from.data],
-                    direction: 'inverse',
-                    top: '10%',
-                    left: '8%',
-                    bottom: '40%',
-                    right: '20%',
-                    symbolSize: 7,
-                    label: {
-                        normal: {
-                            offset: [-75,-5],
-                            position: 'top',
-                            verticalAlign: 'bottom',
-                            align: 'left'
+                singleAxis: [
+                    {
+                        left: '8%',
+                        type: 'category',
+                        boundaryGap: false,
+                        data: data.from.processes,
+                        top: '10%',
+                        bottom: '35%',
+                        right: '20%',
+                        axisLabel: {
+                            interval: 0
                         }
                     },
-                    leaves: {
-                        label: {
-                            normal: {
-                                offset: [0,0],
-                                position: 'right',
-                                verticalAlign: 'middle',
-                                align: 'left'
-                            }
+                    {
+                        left: '8%',
+                        type: 'category',
+                        boundaryGap: false,
+                        data: data.to.processes,
+                        top: '80%',
+                        bottom: '10%',
+                        right: '20%',
+                        axisLabel: {
+                            interval: 0
                         }
-                    },
-                    expandAndCollapse: false,
-                    animationDuration: 550,
-                    animationDurationUpdate: 750
-                },
-                {
-                    singleAxisIndex: 0,
-                    coordinateSystem: 'singleAxis',
-                    type: 'scatter',
-                    data: [],
-                    symbolSize: 0
-                },
-                {
-                    type: 'tree',
-                    name: 'Logistics',
-                    data: [data.to.data],
+                    }
+                    ],
+                    series: [
+                        {
+                            type: 'tree',
+                            name: 'Production',
+                            data: [data.from.data],
+                            direction: 'inverse',
+                            top: '10%',
+                            left: '8%',
+                            bottom: '40%',
+                            right: '20%',
+                            symbolSize: 7,
+                            label: {
+                                normal: {
+                                    offset: [-75,-5],
+                                    position: 'top',
+                                    verticalAlign: 'bottom',
+                                    align: 'left'
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    normal: {
+                                        offset: [0,0],
+                                        position: 'right',
+                                        verticalAlign: 'middle',
+                                        align: 'left'
+                                    }
+                                }
+                            },
+                            expandAndCollapse: false,
+                            animationDuration: 550,
+                            animationDurationUpdate: 750
+                        },
+                        {
+                            singleAxisIndex: 0,
+                            coordinateSystem: 'singleAxis',
+                            type: 'scatter',
+                            data: [],
+                            symbolSize: 0
+                        },
+                        {
+                            type: 'tree',
+                            name: 'Logistics',
+                            data: [data.to.data],
 
-                    top: '80%',
-                    left: '8%',
-                    bottom: '15%',
-                    right: '20%',
-                    symbolSize: 7,
-                    label: {
-                        normal: {
-                            position: 'bottom',
-                            horizontalAlign: 'middle',
-                            align: 'middle'
+                            top: '80%',
+                            left: '8%',
+                            bottom: '15%',
+                            right: '20%',
+                            symbolSize: 7,
+                            label: {
+                                normal: {
+                                    position: 'bottom',
+                                    horizontalAlign: 'middle',
+                                    align: 'middle'
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    normal: {
+                                        position: 'bottom',
+                                        horizontalAlign: 'middle',
+                                        align: 'middle'
+                                    }
+                                }
+                            },
+                            expandAndCollapse: false,
+                            animationDuration: 550,
+                            animationDurationUpdate: 750
+                        },
+                        {
+                            singleAxisIndex: 1,
+                            coordinateSystem: 'singleAxis',
+                            type: 'scatter',
+                            data: [],
+                            symbolSize: 0
                         }
-                    },
-                    leaves: {
+                        ]
+        });
+    }
+
+    function showSankeyView(data) {
+        myChart.setOption(option = {
+                title: {
+                    text: '追溯结果',
+                },
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove'
+                },
+                series: [
+                    {
+                        type: 'sankey',
+                        layout: 'none',
+                        data: data.nodes,
+                        links: data.links,
+                        itemStyle: {
+                            normal: {
+                                borderWidth: 1,
+                                borderColor: '#aaa'
+                            }
+                        },
+                        lineStyle: {
+                            normal: {
+                                curveness: 0.5
+                            }
+                        },
                         label: {
                             normal: {
                                 position: 'bottom',
                                 horizontalAlign: 'middle',
                                 align: 'middle'
                             }
-                        }
-                    },
-                    expandAndCollapse: false,
-                    animationDuration: 550,
-                    animationDurationUpdate: 750
-                },
-                {
-                    singleAxisIndex: 1,
-                    coordinateSystem: 'singleAxis',
-                    type: 'scatter',
-                    data: [],
-                    symbolSize: 0
-                }
-            ]
-        });
-    }
-
-    function showSankeyView(data) {
-        myChart.setOption(option = {
-            title: {
-                text: '追溯结果',
-            },
-            tooltip: {
-                trigger: 'item',
-                triggerOn: 'mousemove'
-            },
-            series: [
-                {
-                    type: 'sankey',
-                    layout: 'none',
-                    data: data.nodes,
-                    links: data.links,
-                    itemStyle: {
-                        normal: {
-                            borderWidth: 1,
-                            borderColor: '#aaa'
-                        }
-                    },
-                    lineStyle: {
-                        normal: {
-                            curveness: 0.5
-                        }
-                    },
-                    label: {
-                        normal: {
-                            position: 'bottom',
-                            horizontalAlign: 'middle',
-                            align: 'middle'
-                        }
-                    },
-                }
-            ]
+                        },
+                    }
+                    ]
         });
     }
 
@@ -263,7 +311,7 @@ $(function () {
             scanning = true;
             Instascan.Camera.getCameras().then(function (cameras) {
                 if (cameras.length > 0) {
-                    //$('#webcam').show();
+                    // $('#webcam').show();
                     scanner.start(cameras[0]);
                     $('#camModal').modal('show');
                 } else {

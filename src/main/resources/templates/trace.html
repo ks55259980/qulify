@@ -5,6 +5,7 @@
     <title>Query Test</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/webjars/bootstrap-table/bootstrap-table.min.css" />
     <link rel="stylesheet" href="../static/css/trace.css" th:href="@{/css/trace.css}" />
 </head>
 
@@ -70,10 +71,11 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
+                    <span style="float:left"></span>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
-                    <img src="" width="960px" height="540px"></img>
+                    <!-- <img src="" width="960px" height="540px"></img> -->
                 </div>
             </div>
         </div>
@@ -81,6 +83,8 @@
     <input id="img-path" type="hidden" value="../static/img/" th:value="@{/img/}" />
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/webjars/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/webjars/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
     <script src="../static/js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
     <script src="../static/js/instascan.min.js" th:src="@{/js/instascan.min.js}"></script>
     <script src="../static/js/trace.js" th:src="@{/js/trace.js}"></script>
