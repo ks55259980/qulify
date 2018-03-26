@@ -20,7 +20,6 @@ import com.spoonsea.qualitytracing.constant.Constants.Category;
 import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.PickWineRecord;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
-import com.spoonsea.qualitytracing.lims.dao.ArLottabRepository;
 import com.spoonsea.qualitytracing.lims.dao.BarcodeRepository;
 import com.spoonsea.qualitytracing.lims.dao.PickWineRepository;
 import com.spoonsea.qualitytracing.lims.dao.Report_DetailRepository;
@@ -36,9 +35,6 @@ public class PickWineReportService implements ReportService<PickWineRecord> {
 	protected static final String reportName = "包装接酒分析报表";
 
 	private static final Logger logger = LoggerFactory.getLogger(PickWineReportService.class);
-
-	@Autowired
-	private ArLottabRepository arlottabRepo;
 
 	@Autowired
 	private BarcodeRepository barcodeRepo;

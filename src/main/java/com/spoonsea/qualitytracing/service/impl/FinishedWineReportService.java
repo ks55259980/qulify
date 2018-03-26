@@ -3,8 +3,6 @@ package com.spoonsea.qualitytracing.service.impl;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,9 +19,7 @@ import com.spoonsea.qualitytracing.configuration.ReportServiceAnnotation;
 import com.spoonsea.qualitytracing.constant.Constants.Category;
 import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.FinishedWineRecord;
-import com.spoonsea.qualitytracing.dto.ReportRecord;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
-import com.spoonsea.qualitytracing.lims.dao.ArLottabRepository;
 import com.spoonsea.qualitytracing.lims.dao.BarcodeRepository;
 import com.spoonsea.qualitytracing.lims.dao.FinishedWineRepository;
 import com.spoonsea.qualitytracing.lims.dao.Report_DetailRepository;
@@ -39,9 +35,6 @@ public class FinishedWineReportService implements ReportService<FinishedWineReco
 	protected static final String reportName = "成品酒分析报表";
 
 	private static final Logger logger = LoggerFactory.getLogger(FinishedWineReportService.class);
-
-	@Autowired
-	private ArLottabRepository arlottabRepo;
 
 	@Autowired
 	private BarcodeRepository barcodeRepo;
