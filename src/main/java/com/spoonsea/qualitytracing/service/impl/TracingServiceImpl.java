@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spoonsea.qualitytracing.constant.Constants.LogisticsProcess;
-import com.spoonsea.qualitytracing.constant.Constants.ProductionProcess;
+import com.spoonsea.qualitytracing.constant.Constants.LogisticsProcessEnum;
+import com.spoonsea.qualitytracing.constant.Constants.ProductionProcessEnum;
 import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.DataNode;
 import com.spoonsea.qualitytracing.entity.BarcodeQueryResult;
@@ -85,12 +85,12 @@ public class TracingServiceImpl implements TracingService {
         String format = "%s %s %s";
         packNode.setName(String.format(format, barcode.getDate(), barcode.getTime(), barcode.getPackagingLine()));
         packNode.setValue(code.getOriginalCode());
-        packNode.setType(ProductionProcess.Package.type);
+        packNode.setType(ProductionProcessEnum.PACKAGE.type);
 
         Barcode sake = barcodeRepo.findTop1ByHidAndEnglishOrderByDateAscTimeAsc(barcode.getHid(), "Sake");
         DataNode sakeNode = new DataNode();
         sakeNode.setName(String.format(format, sake.getDate(), sake.getTime(), "BBT-" + sake.getSakeTank()));
-        sakeNode.setType(ProductionProcess.Sake.type);
+        sakeNode.setType(ProductionProcessEnum.SAKE.type);
         sakeNode.setValue(sake.getHid());
         packNode.addChildren(sakeNode);
 
@@ -99,7 +99,7 @@ public class TracingServiceImpl implements TracingService {
             DataNode fermentNode = new DataNode();
             fermentNode.setName(String.format(format, broth.getDate(), broth.getTime(), "UT-" + broth.getFermenter()));
             fermentNode.setValue(broth.getHid());
-            fermentNode.setType(ProductionProcess.Ferment.type);
+            fermentNode.setType(ProductionProcessEnum.FERMENT.type);
             sakeNode.addChildren(fermentNode);
 
             List<Wort> wortList = wortRepo.findByHid(broth.getHid());
@@ -111,13 +111,13 @@ public class TracingServiceImpl implements TracingService {
                         hid.substring(10, 12));
                 DataNode saccharifyNode = new DataNode();
                 saccharifyNode.setName(String.format(format, date, time, "BH-" + wort.getPotNumber()));
-                saccharifyNode.setType(ProductionProcess.Saccharify.type);
+                saccharifyNode.setType(ProductionProcessEnum.SACCHARIFY.type);
                 saccharifyNode.setValue(hid);
                 fermentNode.addChildren(saccharifyNode);
             }
         }
         Map<String, Object> ret = new HashMap<>();
-        ret.put("processes", ProductionProcess.getProcessList());
+        ret.put("processes", ProductionProcessEnum.getProcessList());
         ret.put("data", packNode);
         return ret;
     }
@@ -154,7 +154,7 @@ public class TracingServiceImpl implements TracingService {
             }
         }
         Map<String, Object> ret = new HashMap<>();
-        ret.put("processes", LogisticsProcess.getProcessList());
+        ret.put("processes", LogisticsProcessEnum.getProcessList());
         ret.put("data", packNode);
         return ret;
     }
