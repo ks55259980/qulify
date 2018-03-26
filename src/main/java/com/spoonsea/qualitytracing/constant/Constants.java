@@ -18,9 +18,12 @@ public class Constants {
 
     public static final List<String> PACKAGE_REPORTS = Arrays.asList("FinishedWineReport", "CapacityReport",
             "TPOReport");
+    // TODO: add Braumat BBTRelease/BBT/BBTFilling Report
     public static final List<String> SAKE_REPORTS = Arrays.asList("SakeLabCheckReport");
+    // TODO: add "BraumatUTReport"
     public static final List<String> FERMENT_REPORTS = Arrays.asList("BrothQualityReport", "WortQualityReport");
-    public static final List<String> SACCHARIFY_REPORTS = null;
+    // TODO: add "LauterTunReport", "MaltIntakeReport"
+    public static final List<String> SACCHARIFY_REPORTS = Arrays.asList("WortQualityReport");
 
     public enum CodeTypeEnum {
 
