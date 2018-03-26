@@ -25,10 +25,10 @@ import com.spoonsea.qualitytracing.lims.model.Barcode;
 import com.spoonsea.qualitytracing.util.MiscUtil;
 
 @Service
-@ReportServiceAnnotation(name = "酿造过滤报表", id = "BraumatFilterReport", category = Category.Brewing, enabled = true)
-public class BraumatFilterReportService extends BaseBraumatReportService {
+@ReportServiceAnnotation(name = "酿造过滤报表", id = "BraumatKGFReport", category = Category.Brewing, enabled = true)
+public class BraumatKGFReportService extends BaseBraumatReportService {
 
-    private static final Logger logger = LoggerFactory.getLogger(BraumatFilterReportService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BraumatKGFReportService.class);
 
     @Autowired
     private BarcodeRepository barcodeRepo;
