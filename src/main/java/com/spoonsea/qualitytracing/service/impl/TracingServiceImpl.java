@@ -148,7 +148,7 @@ public class TracingServiceImpl implements TracingService {
                 packNode.addChildren(rollOff);
 
                 DataNode warehouseShipment = new DataNode();
-                warehouseShipment.setName(String.format(format, detail.getArea(), detail.getNumberNo()));
+                warehouseShipment.setName(String.format(format, detail.getTargetTimeString(), detail.getArea(), detail.getNumberNo()));
                 warehouseShipment.setValue(detail.getBarcode());
                 rollOff.addChildren(warehouseShipment);
             }
