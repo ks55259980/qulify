@@ -1,5 +1,6 @@
 $(function () {
-    // var $nav = $('ul.nav'), $navbars = $nav.find('li'), $pages = $('div.page');
+    // var $nav = $('ul.nav'), $navbars = $nav.find('li'), $pages =
+    // $('div.page');
     var myChart = echarts.init($('#echarts-region')[0]);
     $('#dataModal').modal({
         show: false
@@ -165,7 +166,7 @@ $(function () {
                         boundaryGap: false,
                         data: data.from.processes,
                         top: '10%',
-                        bottom: '35%',
+                        bottom: '40%',
                         right: '20%',
                         axisLabel: {
                             interval: 0
@@ -176,9 +177,9 @@ $(function () {
                         type: 'category',
                         boundaryGap: false,
                         data: data.to.processes,
-                        top: '80%',
-                        bottom: '10%',
-                        right: '20%',
+                        top: '70%',
+                        bottom: '5%',
+                        right: '30%',
                         axisLabel: {
                             interval: 0
                         }
@@ -229,24 +230,26 @@ $(function () {
                             name: 'Logistics',
                             data: [data.to.data],
 
-                            top: '80%',
+                            top: '70%',
                             left: '8%',
-                            bottom: '15%',
-                            right: '20%',
+                            bottom: '5%',
+                            right: '30%',
                             symbolSize: 7,
                             label: {
                                 normal: {
-                                    position: 'bottom',
-                                    horizontalAlign: 'middle',
-                                    align: 'middle'
+                                    offset:[5,7],
+                                    position: 'top',
+                                    verticalAlign: 'bottom',
+                                    align: 'left'
                                 }
                             },
                             leaves: {
                                 label: {
                                     normal: {
-                                        position: 'bottom',
-                                        horizontalAlign: 'middle',
-                                        align: 'middle'
+                                        offset:[0,0],
+                                        position: 'right',
+                                        verticalAlign: 'middle',
+                                        align: 'left'
                                     }
                                 }
                             },
