@@ -77,8 +77,8 @@ public class BraumatBHReportService extends BaseBraumatReportService {
                     for (int i = 0; i < count.get(barcode.getHid()); i++) {
                         chargNrList.add(fillingUT.getChargNr() + i);
                     }
-                    result.addAll(brau31Repo.findByAuftrNrAndChargNrInAndTeilanlIn(fillingUT.getAuftrNr(), chargNrList,
-                            Arrays.asList("Rice Cooker1", "Rice Cooker2")));
+                    result.addAll(brau31Repo.findByAuftrNrAndChargNrInAndTeilanlStartingWith(fillingUT.getAuftrNr(),
+                            chargNrList, "Rice Cooker"));
                 }
             }
         }
