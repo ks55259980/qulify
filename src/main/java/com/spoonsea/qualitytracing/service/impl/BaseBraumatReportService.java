@@ -11,7 +11,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.spoonsea.qualitytracing.braumat.entity.Brau33;
 import com.spoonsea.qualitytracing.braumat.entity.Braumat;
 import com.spoonsea.qualitytracing.configuration.ReportServiceAnnotation;
 import com.spoonsea.qualitytracing.dto.MapReport;

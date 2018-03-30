@@ -12,4 +12,6 @@ public interface BarcodeBrothRepository extends JpaRepository<BarcodeBroth, Inte
 	@Query(value = "select * from dbo.BarcodeBroth where ?1 like '%' + HID + '%'", nativeQuery=true)
 	List<BarcodeBroth> findByHidLike(String sid);
 
+    List<BarcodeBroth> findByHid(String sid);
+
 }
