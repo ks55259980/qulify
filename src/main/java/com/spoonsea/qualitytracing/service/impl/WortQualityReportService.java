@@ -22,11 +22,11 @@ import com.spoonsea.qualitytracing.lims.dao.WortRepository;
 import com.spoonsea.qualitytracing.lims.model.Barcode;
 import com.spoonsea.qualitytracing.lims.model.Broth;
 import com.spoonsea.qualitytracing.lims.model.Wort;
-import com.spoonsea.qualitytracing.service.LimsReportBySid;
+import com.spoonsea.qualitytracing.service.ReportBySid;
 
 @Service
 @ReportServiceAnnotation(name = WortQualityReportService.reportName, id = "WortQualityReport", category = Category.Brewing)
-public class WortQualityReportService extends BaseLimsReportService<WortQualityRecord> implements LimsReportBySid {
+public class WortQualityReportService extends BaseLimsReportService<WortQualityRecord> implements ReportBySid {
 
     private static final Logger logger = LoggerFactory.getLogger(WortQualityReportService.class);
 

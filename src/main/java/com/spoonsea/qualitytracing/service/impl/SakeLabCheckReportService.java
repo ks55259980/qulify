@@ -24,11 +24,11 @@ import com.spoonsea.qualitytracing.lims.dao.BarcodeRepository;
 import com.spoonsea.qualitytracing.lims.dao.SakeRepository;
 import com.spoonsea.qualitytracing.lims.model.Barcode;
 import com.spoonsea.qualitytracing.lims.model.Sake;
-import com.spoonsea.qualitytracing.service.LimsReportByHid;
+import com.spoonsea.qualitytracing.service.ReportByHid;
 
 @Service
 @ReportServiceAnnotation(name = SakeLabCheckReportService.reportName, id = "SakeLabCheckReport", category = Category.Brewing)
-public class SakeLabCheckReportService extends BaseLimsReportService<SakeLabCheckRecord> implements LimsReportByHid {
+public class SakeLabCheckReportService extends BaseLimsReportService<SakeLabCheckRecord> implements ReportByHid {
 
     private static final Logger logger = LoggerFactory.getLogger(SakeLabCheckReportService.class);
 

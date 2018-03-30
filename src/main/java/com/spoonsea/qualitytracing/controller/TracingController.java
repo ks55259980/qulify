@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spoonsea.qualitytracing.constant.Constants.ProductionProcessEnum;
 import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
-import com.spoonsea.qualitytracing.service.LimsReportByHid;
-import com.spoonsea.qualitytracing.service.LimsReportBySid;
+import com.spoonsea.qualitytracing.service.ReportByHid;
+import com.spoonsea.qualitytracing.service.ReportBySid;
 import com.spoonsea.qualitytracing.service.ReportService;
 import com.spoonsea.qualitytracing.service.TracingService;
 import com.spoonsea.qualitytracing.util.ResponseUtil;
@@ -72,13 +72,13 @@ public class TracingController {
                     reports.add(service.getReport(code));
                 } else if (ProductionProcessEnum.queryUsingHid(type)) {
                     logger.info("use hid '{}' to search ...", code);
-                    if (service instanceof LimsReportByHid) {
-                        reports.add(((LimsReportByHid) service).getReportByHid(code));
+                    if (service instanceof ReportByHid) {
+                        reports.add(((ReportByHid) service).getReportByHid(code));
                     }
                 } else if (ProductionProcessEnum.queryUsingSid(type)) {
                     logger.info("use sid '{}' to search ...", code);
-                    if (service instanceof LimsReportBySid) {
-                        reports.add(((LimsReportBySid) service).getReportBySid(code));
+                    if (service instanceof ReportBySid) {
+                        reports.add(((ReportBySid) service).getReportBySid(code));
                     }
                 } else {
                     continue;
