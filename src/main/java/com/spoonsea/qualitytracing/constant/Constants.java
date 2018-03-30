@@ -20,10 +20,10 @@ public class Constants {
             "TPOReport");
     // TODO: add Braumat BBTRelease/BBT/BBTFilling Report
     public static final List<String> SAKE_REPORTS = Arrays.asList("SakeLabCheckReport");
-    // TODO: add "BraumatUTReport"
-    public static final List<String> FERMENT_REPORTS = Arrays.asList("BrothQualityReport", "WortQualityReport");
-    // TODO: add "LauterTunReport", "MaltIntakeReport"
-    public static final List<String> SACCHARIFY_REPORTS = Arrays.asList("WortQualityReport");
+    public static final List<String> FERMENT_REPORTS = Arrays.asList("BrothQualityReport", "WortQualityReport",
+            "BraumatUTReport");
+    public static final List<String> SACCHARIFY_REPORTS = Arrays.asList("BraumatLauterTunReport",
+            "BraumatMaltIntakeReport");
 
     public enum CodeTypeEnum {
 
