@@ -2,7 +2,7 @@ package com.spoonsea.qualitytracing.service;
 
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
 
-public interface LimsReportByHid {
+public interface ReportByHid {
 
     ReportTemplate<?> getReportByHid(String code);
 
