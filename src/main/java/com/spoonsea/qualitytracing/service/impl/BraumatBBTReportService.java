@@ -19,18 +19,23 @@ import com.spoonsea.qualitytracing.configuration.ReportServiceAnnotation;
 import com.spoonsea.qualitytracing.constant.Constants.Category;
 import com.spoonsea.qualitytracing.dto.CodeInfo;
 import com.spoonsea.qualitytracing.dto.ReportTemplate;
+import com.spoonsea.qualitytracing.lims.dao.SakeRepository;
 import com.spoonsea.qualitytracing.lims.model.Sake;
 import com.spoonsea.qualitytracing.service.LimsService;
+import com.spoonsea.qualitytracing.service.ReportByHid;
 import com.spoonsea.qualitytracing.util.MiscUtil;
 
 @Service
 @ReportServiceAnnotation(name = "酿造清酒报表", id = "BraumatBBTReport", category = Category.Brewing)
-public class BraumatBBTReportService extends BaseBraumatReportService {
+public class BraumatBBTReportService extends BaseBraumatReportService implements ReportByHid {
 
     private static final Logger logger = LoggerFactory.getLogger(BraumatBBTReportService.class);
 
     @Autowired
     private LimsService limsService;
+
+    @Autowired
+    private SakeRepository sakeRepo;
 
     @Autowired
     private Brau33Repository braumatRepo;
@@ -83,6 +88,11 @@ public class BraumatBBTReportService extends BaseBraumatReportService {
     public ReportTemplate<Map<String, String>> getReport(String barcode) {
         List<Sake> sakeList = limsService.getSakeList(barcode);
         return getReport(sakeList);
+    }
+
+    @Override
+    public ReportTemplate<?> getReportByHid(String code) {
+        return getReport(sakeRepo.findByHid(code));
     }
 
 }
