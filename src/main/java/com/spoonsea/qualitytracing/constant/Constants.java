@@ -18,8 +18,8 @@ public class Constants {
 
     public static final List<String> PACKAGE_REPORTS = Arrays.asList("FinishedWineReport", "CapacityReport",
             "TPOReport");
-    // TODO: add Braumat BBTRelease/BBT/BBTFilling Report
-    public static final List<String> SAKE_REPORTS = Arrays.asList("SakeLabCheckReport");
+    public static final List<String> SAKE_REPORTS = Arrays.asList("SakeLabCheckReport", "BraumatBBTReleaseReport",
+            "BraumatBBTReport", "BraumatBBTFillingReport");
     public static final List<String> FERMENT_REPORTS = Arrays.asList("BrothQualityReport", "WortQualityReport",
             "BraumatUTReport");
     public static final List<String> SACCHARIFY_REPORTS = Arrays.asList("BraumatLauterTunReport",
