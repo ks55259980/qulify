@@ -86,12 +86,14 @@ public class TracingServiceImpl implements TracingService {
         packNode.setName(String.format(format, barcode.getDate(), barcode.getTime(), barcode.getPackagingLine()));
         packNode.setValue(code.getOriginalCode());
         packNode.setType(ProductionProcessEnum.PACKAGE.type);
+        packNode.setOriginalCode(code.getOriginalCode());
 
         Barcode sake = barcodeRepo.findTop1ByHidAndEnglishOrderByDateAscTimeAsc(barcode.getHid(), "Sake");
         DataNode sakeNode = new DataNode();
         sakeNode.setName(String.format(format, sake.getDate(), sake.getTime(), "BBT-" + sake.getSakeTank()));
-        sakeNode.setType(ProductionProcessEnum.SAKE.type);
         sakeNode.setValue(sake.getHid());
+        sakeNode.setType(ProductionProcessEnum.SAKE.type);
+        sakeNode.setOriginalCode(code.getOriginalCode());
         packNode.addChildren(sakeNode);
 
         List<BarcodeBroth> barcodeBrothList = barcodeBrothRepo.findByHidLike(sake.getSid());
@@ -100,6 +102,7 @@ public class TracingServiceImpl implements TracingService {
             fermentNode.setName(String.format(format, broth.getDate(), broth.getTime(), "UT-" + broth.getFermenter()));
             fermentNode.setValue(broth.getHid());
             fermentNode.setType(ProductionProcessEnum.FERMENT.type);
+            fermentNode.setOriginalCode(code.getOriginalCode());
             sakeNode.addChildren(fermentNode);
 
             List<Wort> wortList = wortRepo.findByHid(broth.getHid());
@@ -111,8 +114,9 @@ public class TracingServiceImpl implements TracingService {
                         hid.substring(10, 12));
                 DataNode saccharifyNode = new DataNode();
                 saccharifyNode.setName(String.format(format, date, time, "BH-" + wort.getPotNumber()));
-                saccharifyNode.setType(ProductionProcessEnum.SACCHARIFY.type);
                 saccharifyNode.setValue(hid);
+                saccharifyNode.setType(ProductionProcessEnum.SACCHARIFY.type);
+                saccharifyNode.setOriginalCode(code.getOriginalCode());
                 fermentNode.addChildren(saccharifyNode);
             }
         }
@@ -148,7 +152,8 @@ public class TracingServiceImpl implements TracingService {
                 packNode.addChildren(rollOff);
 
                 DataNode warehouseShipment = new DataNode();
-                warehouseShipment.setName(String.format(format, detail.getTargetTimeString(), detail.getArea(), detail.getNumberNo()));
+                warehouseShipment.setName(
+                        String.format(format, detail.getTargetTimeString(), detail.getArea(), detail.getNumberNo()));
                 warehouseShipment.setValue(detail.getBarcode());
                 rollOff.addChildren(warehouseShipment);
             }
@@ -158,4 +163,5 @@ public class TracingServiceImpl implements TracingService {
         ret.put("data", packNode);
         return ret;
     }
+
 }

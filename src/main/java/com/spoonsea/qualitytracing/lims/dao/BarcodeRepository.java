@@ -9,8 +9,8 @@ import com.spoonsea.qualitytracing.lims.model.Barcode;
 
 public interface BarcodeRepository extends JpaRepository<Barcode, Integer> {
 
-    Barcode findTop1ByPackagingLineAndDateAndTimeLessThanOrderByDateDescTimeDesc(String packagingLine,
-            String date, String time);
+    Barcode findTop1ByPackagingLineAndDateAndTimeLessThanOrderByDateDescTimeDesc(String packagingLine, String date,
+            String time);
 
     Barcode findOneByBarcode(String barcode);
 
@@ -31,6 +31,11 @@ public interface BarcodeRepository extends JpaRepository<Barcode, Integer> {
     Barcode findOneByHidAndEnglish(String hid, String string);
 
     Barcode findTop1ByHidAndEnglishOrderByDateAscTimeAsc(String hid, String english);
+
+    Barcode findTop1ByPackagingLineAndHidOrderByDateAscTimeAsc(String line, String hid);
+
+    Barcode findTop1ByPackagingLineAndHidAndDateAndTimeLessThanEqualOrderByDateDescTimeDesc(String line, String hid,
+            String date, String time);
 
     // Barcode findOneBySidLikeOrderByDateAndTimeAsc(String sid);
     //

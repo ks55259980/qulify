@@ -18,16 +18,18 @@ public class DataNode implements Serializable {
     private String name;
     private String value;
     private int type;
+    private String originalCode;
 
     private List<DataNode> children;
 
     public DataNode() {
     }
 
-    public DataNode(String name, String value, int type) {
+    public DataNode(String name, String value, int type, String originalCode) {
         this.name = name;
         this.value = value;
         this.type = type;
+        this.originalCode = originalCode;
     }
 
     public void addChildren(DataNode... children) {
@@ -72,6 +74,14 @@ public class DataNode implements Serializable {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getOriginalCode() {
+        return originalCode;
+    }
+
+    public void setOriginalCode(String originalCode) {
+        this.originalCode = originalCode;
     }
 
     public List<DataNode> getChildren() {

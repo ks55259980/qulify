@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.spoonsea.qualitytracing.braumat.entity.Braumat;
-import com.spoonsea.qualitytracing.braumat.entity.BraumatKey;
 
 @NoRepositoryBean
 public interface BraumatRepository<T extends Braumat> extends JpaRepository<T, Long> {
@@ -85,4 +84,13 @@ public interface BraumatRepository<T extends Braumat> extends JpaRepository<T, L
 
     List<T> findByAuftrNrAndChargNrAndTeilanlAndStartTsGreaterThanEqualAndEndTsLessThanEqual(int auftrNr, int chargNr,
             String teilanl, BigInteger startTs, BigInteger endTs);
+
+    T findTop1ByRezTypAndTeilanlStartingWithAndSwDfm1AndEndTsGreaterThanEqualOrderByStartTsAsc(String rezTyp,
+            String line, String iwDfm1, BigInteger endTs);
+
+    T findTop1ByRezTypAndIwDfm1AndEndTsLessThanEqualOrderByStartTsDesc(String rezTyp, String iwDfm1,
+            BigInteger startTs);
+
+    T findTop1ByRezTypAndIwDfm1AndStartTsLessThanEqualOrderByStartTsDesc(String rezTyp, String iwDfm1,
+            BigInteger StartTs);
 }

@@ -48,6 +48,7 @@ $(function () {
     var lastNode;
     var lastCode;
     myChart.on('click', function (params) {
+        console.log(params);
         if (params.seriesName == 'Logistics') {
             return;
         }
@@ -62,9 +63,10 @@ $(function () {
         if (params.data.type != null && params.data.value != null) {
             var type = params.data.type;
             var value = params.data.value;
+            var originalCode = params.data.originalCode;
             $.get(
                     "/tracing/report", 
-                    {"type": type, "code": value},
+                    {"type": type, "code": value, "originalCode": originalCode},
                     function(response) {
                         if (response.code == 0 && response.data.length > 0) {
                             for (var i = 0; i < response.data.length; i++) {
