@@ -17,7 +17,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "limsEntityManagerFactory", transactionManagerRef = "limsTransactionManager", basePackages = {
@@ -47,9 +46,10 @@ public class LimsJpaConfig {
     }
 
     private Map<String, String> getVendorProperties(DataSource dataSource) {
-        Map<String, String> properties = jpaProperties.getHibernateProperties(dataSource);
-        properties.put("hibernate.dialect", "org.hibernate.dialect.SQLServer2008Dialect");
-        return properties;
+        return jpaProperties.getHibernateProperties(dataSource);
+        // Map<String, String> properties = jpaProperties.getHibernateProperties(dataSource);
+        // properties.put("hibernate.dialect", "org.hibernate.dialect.SQLServer2008Dialect");
+        // return properties;
     }
 
     @Bean("limsTransactionManager")

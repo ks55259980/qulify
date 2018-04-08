@@ -22,10 +22,10 @@ public interface BarcodeRepository extends JpaRepository<Barcode, Integer> {
 
     List<Barcode> findBySidLikeAndEnglish(String sid, String english);
 
-    @Query(value = "select * from dbo.barcode where ?1 like '%' + HID + '%'", nativeQuery = true)
+    @Query(value = "select * from barcode where ?1 like CONCAT('%',HID,'%')", nativeQuery = true)
     List<Barcode> findByLikeHid(String sid);
 
-    @Query(value = "select * from dbo.barcode where English=?1 and ?2 like '%' + HID + '%'", nativeQuery = true)
+    @Query(value = "select * from barcode where English=?1 and ?2 like CONCAT('%',HID,'%')", nativeQuery = true)
     List<Barcode> findByEnglishAndLikeHid(String english, String sid);
 
     Barcode findOneByHidAndEnglish(String hid, String string);

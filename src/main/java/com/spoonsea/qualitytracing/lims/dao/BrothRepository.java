@@ -10,11 +10,11 @@ import com.spoonsea.qualitytracing.lims.model.Broth;
 
 public interface BrothRepository extends JpaRepository<Broth, String> {
 
-    @Query(value = "select * from dbo.Broth where ?1 like '%' + HID + '%'", nativeQuery=true)
+    @Query(value = "select * from Broth where ?1 like CONCAT('%',HID,'%')", nativeQuery=true)
     List<Broth> findByLikeHid(String sid);
 
     @Query("select new com.spoonsea.qualitytracing.dto.BrothQualityRecord(id,date,fermentation,"
             + "variety,age,og,ae,rdf,alcohol,ph,totalAcid,bitterness,colour,conclusion,remark,"
-            + "detecting_human,reviewer ) from Broth where ?1 like '%' + HID + '%'")
+            + "detecting_human,reviewer ) from Broth where ?1 like CONCAT('%',HID,'%')")
     List<BrothQualityRecord> findBrothQualityRecordByLikeHid(String sid);
 }

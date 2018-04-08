@@ -26,15 +26,22 @@
 	</properties>
 
 	<profiles>
+        <profile>
+            <id>aliyun</id>
+            <properties>
+                <env>aliyun</env>
+                <wsdl>WSQATracking.wsdl</wsdl>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
 		<profile>
 			<id>dev</id>
 			<properties>
 				<env>dev</env>
 				<wsdl>WSQATracking.wsdl</wsdl>
 			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 		</profile>
 		<profile>
 			<id>dev1</id>

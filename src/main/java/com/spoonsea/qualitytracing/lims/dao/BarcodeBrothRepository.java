@@ -9,7 +9,7 @@ import com.spoonsea.qualitytracing.lims.model.BarcodeBroth;
 
 public interface BarcodeBrothRepository extends JpaRepository<BarcodeBroth, Integer> {
 
-	@Query(value = "select * from dbo.BarcodeBroth where ?1 like '%' + HID + '%'", nativeQuery=true)
+	@Query(value = "select * from BarcodeBroth where ?1 like CONCAT('%',HID,'%')", nativeQuery=true)
 	List<BarcodeBroth> findByHidLike(String sid);
 
     List<BarcodeBroth> findByHid(String sid);
