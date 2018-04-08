@@ -49,6 +49,10 @@ $(function () {
     var lastCode;
     myChart.on('click', function (params) {
         console.log(params);
+        if (params.data.type == 9999) {
+            alert("无可用数据");
+            return;
+        }
         if (params.seriesName == 'Logistics') {
             return;
         }

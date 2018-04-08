@@ -23,6 +23,9 @@ public class DataNode implements Serializable {
     private List<DataNode> children;
 
     public DataNode() {
+        this.name = "无";
+        this.value = "无";
+        this.type = 9999;
     }
 
     public DataNode(String name, String value, int type, String originalCode) {

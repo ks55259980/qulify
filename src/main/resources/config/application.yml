@@ -27,7 +27,7 @@ spring:
       test-while-idle: true
       time-between-eviction-runs-millis: 18800
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
       naming:

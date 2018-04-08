@@ -78,10 +78,16 @@ public class TracingServiceImpl implements TracingService {
 
     private Map<String, Object> getFromData(CodeInfo code) {
         Barcode barcode = limsService.getBarcode(code);
-        if (barcode == null) {
-            return null;
-        }
         DataNode packNode = new DataNode();
+
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("processes", ProductionProcessEnum.getProcessList());
+        ret.put("data", packNode);
+
+        if (barcode == null) {
+            return ret;
+        }
+
         String format = "%s %s %s";
         packNode.setName(String.format(format, barcode.getDate(), barcode.getTime(), barcode.getPackagingLine()));
         packNode.setValue(code.getOriginalCode());
@@ -89,6 +95,15 @@ public class TracingServiceImpl implements TracingService {
         packNode.setOriginalCode(code.getOriginalCode());
 
         Barcode sake = barcodeRepo.findTop1ByHidAndEnglishOrderByDateAscTimeAsc(barcode.getHid(), "Sake");
+        if (sake == null) {
+            DataNode sakeNode = new DataNode();
+            DataNode fermentNode = new DataNode();
+            DataNode saccharifyNode = new DataNode();
+            packNode.addChildren(sakeNode);
+            sakeNode.addChildren(fermentNode);
+            fermentNode.addChildren(saccharifyNode);
+            return ret;
+        }
         DataNode sakeNode = new DataNode();
         sakeNode.setName(String.format(format, sake.getDate(), sake.getTime(), "BBT-" + sake.getSakeTank()));
         sakeNode.setValue(sake.getHid());
@@ -97,6 +112,13 @@ public class TracingServiceImpl implements TracingService {
         packNode.addChildren(sakeNode);
 
         List<BarcodeBroth> barcodeBrothList = barcodeBrothRepo.findByHidLike(sake.getSid());
+        if (barcodeBrothList.isEmpty()) {
+            DataNode fermentNode = new DataNode();
+            DataNode saccharifyNode = new DataNode();
+            sakeNode.addChildren(fermentNode);
+            fermentNode.addChildren(saccharifyNode);
+            return ret;
+        }
         for (BarcodeBroth broth : barcodeBrothList) {
             DataNode fermentNode = new DataNode();
             fermentNode.setName(String.format(format, broth.getDate(), broth.getTime(), "UT-" + broth.getFermenter()));
@@ -106,6 +128,10 @@ public class TracingServiceImpl implements TracingService {
             sakeNode.addChildren(fermentNode);
 
             List<Wort> wortList = wortRepo.findByHid(broth.getHid());
+            if (wortList.isEmpty()) {
+                DataNode saccharifyNode = new DataNode();
+                fermentNode.addChildren(saccharifyNode);
+            }
             for (Wort wort : wortList) {
                 String hid = wort.getHid();
                 String date = String.format("20%s-%s-%s", hid.substring(0, 2), hid.substring(2, 4),
@@ -120,9 +146,6 @@ public class TracingServiceImpl implements TracingService {
                 fermentNode.addChildren(saccharifyNode);
             }
         }
-        Map<String, Object> ret = new HashMap<>();
-        ret.put("processes", ProductionProcessEnum.getProcessList());
-        ret.put("data", packNode);
         return ret;
     }
 
