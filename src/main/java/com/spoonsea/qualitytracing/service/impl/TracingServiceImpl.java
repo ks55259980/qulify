@@ -180,6 +180,8 @@ public class TracingServiceImpl implements TracingService {
                 warehouseShipment.setValue(detail.getBarcode());
                 rollOff.addChildren(warehouseShipment);
             }
+        } else {
+            packNode = new DataNode();
         }
         Map<String, Object> ret = new HashMap<>();
         ret.put("processes", LogisticsProcessEnum.getProcessList());
