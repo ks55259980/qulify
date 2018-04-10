@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.spoonsea.qualitytracing.lims.model.Barcode;
 
+/**
+ * MySQL shoud set lower_case_table_names = 1, due to Camel-Case entity name
+ */
 public interface BarcodeRepository extends JpaRepository<Barcode, Integer> {
 
     Barcode findTop1ByPackagingLineAndDateAndTimeLessThanOrderByDateDescTimeDesc(String packagingLine, String date,
