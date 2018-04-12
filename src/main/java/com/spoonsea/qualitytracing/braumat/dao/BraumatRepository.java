@@ -93,4 +93,9 @@ public interface BraumatRepository<T extends Braumat> extends JpaRepository<T, L
 
     T findTop1ByRezTypAndIwDfm1AndStartTsLessThanEqualOrderByStartTsDesc(String rezTyp, String iwDfm1,
             BigInteger StartTs);
+
+    T findTop1ByTeilanlLikeAndIwDfm1StartingWithAndStartTsLessThanOrderByStartTsDesc(String teilanl, String iwDfm1,
+            BigInteger startTs);
+
+    List<T> findByTeilanlAndAuftrNrAndChargNr(String teilanl, int auftrNr, int chargNr);
 }
