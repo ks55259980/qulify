@@ -16,6 +16,7 @@ public class Constants {
         public static final String Original = "原材料";
     }
 
+    // define the report list for each type of the tracing node
     public static final List<String> PACKAGE_REPORTS = Arrays.asList("FinishedWineReport", "CapacityReport",
             "TPOReport");
     public static final List<String> SAKE_REPORTS = Arrays.asList("SakeLabCheckReport", "BraumatBBTReleaseReport",
@@ -24,6 +25,8 @@ public class Constants {
             "BraumatUTReport");
     public static final List<String> SACCHARIFY_REPORTS = Arrays.asList("BraumatLauterTunReport",
             "BraumatMaltIntakeReport");
+    public static final List<String> CENTRIFUGAL_FILTRATION_REPORTS = Arrays.asList("BraumatBBTFillingReport",
+            "BraumatUTFilterReport", "BraumatPVPPBReport", "AuxiliaryMaterialReport");
 
     public enum CodeTypeEnum {
 
