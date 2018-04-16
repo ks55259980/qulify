@@ -160,13 +160,13 @@ public class TracingServiceImpl implements TracingService {
         Date endTime = dt.plus(120 * 60000).toDate();
 
         BarcodeQueryResult result = new BarcodeQueryResult(0, "", null, null);
-        // FIXME: commented due to unavailable web service
-        // try {
-        // result = barcodeQueryService.queryByTimeInterval(WorkshopUtil.getBarcodeWorkshopCode(code.getWorkshop()),
-        // WorkshopUtil.getBarcodeLineCode(code.getLine()), startTime, endTime);
-        // } catch (Exception e) {
-        // logger.error("get barcode query result", e);
-        // }
+        // FIXME: commented due to unavailable web service(local network limited)
+        /*
+         * try { result =
+         * barcodeQueryService.queryByTimeInterval(WorkshopUtil.getBarcodeWorkshopCode(code.getWorkshop()),
+         * WorkshopUtil.getBarcodeLineCode(code.getLine()), startTime, endTime); } catch (Exception e) {
+         * logger.error("get barcode query result", e); }
+         */
         if (result.getCode() == 0 && result.getDetailList() != null) {
             for (BarcodeQueryResultDetail detail : result.getDetailList()) {
                 DataNode rollOff = new DataNode();

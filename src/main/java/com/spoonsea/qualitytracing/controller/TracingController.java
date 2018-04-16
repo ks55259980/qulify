@@ -66,6 +66,13 @@ public class TracingController {
         return ResponseUtil.makeResponse(reports);
     }
 
+    /**
+     * @param type 追溯树图中节点的类型，分为包装、清酒、发酵和糖化
+     * @param code 对应上述类型的追溯码，分为capCode、hid、sid
+     * @param originalCode capCode
+     * @param reportId 报表id
+     * @return 报表集合，由Constants定义{@link com.spoonsea.qualitytracing.constant.Constants.ProductionProcessEnum}
+     */
     private ReportTemplate<?> getReport(Integer type, String code, String originalCode, String reportId) {
         ReportService<?> service = reportServices.get(reportId);
         if (service != null) {

@@ -25,11 +25,13 @@ public class Constants {
             "BraumatUTReport");
     public static final List<String> SACCHARIFY_REPORTS = Arrays.asList("BraumatLauterTunReport",
             "BraumatMaltIntakeReport");
+    /**
+     * 各报表处于现有追溯树图节点之间，暂未加入树图
+     */
     public static final List<String> CENTRIFUGAL_FILTRATION_REPORTS = Arrays.asList("BraumatBBTFillingReport",
             "BraumatUTFilterReport", "BraumatPVPPBReport", "AuxiliaryMaterialReport");
 
     public enum CodeTypeEnum {
-
         UNDETERMINED(-1, "瓶身码或条码", null),
         CAP_CODE(0, "瓶身码", "^\\d{8}[A-Z]{2}\\d{2}:\\d{2}-\\d{2}$"),
         BARCODE(1, "条码", "^\\d{13}$"),
@@ -72,8 +74,12 @@ public class Constants {
 
     }
 
+    /**
+     * 定义追溯树图节点类型，对应的追溯代码类型，报表列表
+     * @author kangxin
+     * 2018年4月16日
+     */
     public enum ProductionProcessEnum {
-
         PACKAGE("包装", 0, CodeTypeEnum.UNDETERMINED, PACKAGE_REPORTS),
         SAKE("清酒", 1, CodeTypeEnum.HID, SAKE_REPORTS),
         FERMENT("发酵", 2, CodeTypeEnum.SID, FERMENT_REPORTS),
